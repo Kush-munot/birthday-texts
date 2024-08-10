@@ -14,6 +14,9 @@ const btn = {
     backgroundColor: "#1976d2",
     height: "40px",
     width: "auto",
+    textTransform:'none',
+    borderRadius:'25px',
+    width:'100px',
     "&:hover": {
         backgroundColor: "#915831",
         color: "white",
@@ -75,7 +78,7 @@ export default function Navbar() {
                                 </Typography>
                             </Grid>
                         </a>
-                        <Button sx={btn}>Sign Up</Button>
+                        <Button href="/signUp" sx={btn}>Sign Up</Button>
                     </Grid>
 
                 </Toolbar>
