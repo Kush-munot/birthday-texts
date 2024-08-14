@@ -11,19 +11,5 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
       - mongo-data:/data/db
-
-  app:
-    build: .
-    container_name: nextjs-app
-    ports:
-      - '3000:3000'
-    volumes:
-      - .:/app
-    depends_on:
-      - mongo
-    environment:
-      MONGODB_URI: mongodb://root:example@mongo:27017
-    command: npm run dev
-
 volumes:
   mongo-data:

@@ -5,8 +5,9 @@ const Signup = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [otp, setOtp] = useState('');
     const [smsSent, setSmsSent] = useState(false);
-    const [error, setError] = useState('');
     const [open, setOpen] = useState(false);
+    const [msg, setMsg] = useState('');
+    const [severity, setSeverity] = useState('');
 
     const handlePhoneNumberChange = (event) => {
         setPhoneNumber(event.target.value);
@@ -19,7 +20,7 @@ const Signup = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (phoneNumber.length !== 10) {
-            setError('Invalid phone number. Please try again.');
+            setMsg('Invalid phone number. Please try again.');
             setOpen(true);
             return;
         }
@@ -36,16 +37,19 @@ const Signup = () => {
             const data = await response.json();
 
             if (data.success) {
-                setSmsSent(true);
-                setError('');
-                setOpen(false);
-            } else {
-                setError('Failed to send OTP. Please try again.');
+                setMsg('OTP Sent Successfully!!')
+                setSmsSent(true)
                 setOpen(true);
+                setSeverity('success')
+            } else {
+                setMsg('Failed to send OTP. Please try again.');
+                setOpen(true);
+                setSeverity('error')
             }
         } catch (error) {
-            setError('An error occurred. Please try again.');
+            setMsg('An error occurred. Please try again.');
             setOpen(true);
+            setSeverity('error')
         }
     };
 
@@ -61,16 +65,21 @@ const Signup = () => {
             });
 
             const data = await response.json();
+            console.log(data);
 
             if (data.success) {
-                setSuccess('OTP Verified successfully!');
-                setError('');
-                console.log(data);
+                setMsg('OTP Verified successfully!');
+                setOpen(true);
+                setSeverity('success')
             } else {
-                setError('Invalid OTP. Please try again.');
+                setMsg('Invalid OTP. Please try again.');
+                setOpen(true);
+                setSeverity('error')
             }
         } catch (error) {
-            setError('An error occurred. Please try again.');
+            setMsg('An error occurred. Please try again.');
+            setOpen(true);
+            setSeverity('error')
         }
     };
 
@@ -90,7 +99,6 @@ const Signup = () => {
                         margin="normal"
                         value={phoneNumber}
                         onChange={handlePhoneNumberChange}
-                        error={!!error}
                         sx={{ margin: '0 10px 10px 0' }}
                     />
                     <Button variant="contained" color="primary" type="submit" fullWidth>
@@ -107,7 +115,6 @@ const Signup = () => {
                             margin="normal"
                             value={otp}
                             onChange={handleOtpChange}
-                            error={!!error}
                         />
                         <Button variant="contained" color="primary" type="submit" fullWidth>
                             Verify OTP
@@ -116,8 +123,8 @@ const Signup = () => {
                 )}
 
                 <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-                        {error}
+                    <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
+                        {msg}
                     </Alert>
                 </Snackbar>
             </Box>
