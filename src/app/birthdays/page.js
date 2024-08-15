@@ -3,6 +3,7 @@
 import { Alert, Box, Button, FormControl, Grid, InputLabel, MenuItem, Modal, Select, Snackbar, Stack, TextField, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react'
+import { differenceInCalendarDays, addYears, format } from 'date-fns';
 
 
 const btn = {
@@ -65,6 +66,23 @@ const month = [
 ];
 const day = Array.from({ length: 31 }, (_, i) => i + 1);
 
+const calculateWeeksLeft = (day, monthh) => {
+    console.log(day, monthh);
+    const monthIndex = month.indexOf(monthh);
+    console.log(monthIndex);
+    const year = new Date().getFullYear();
+    let birthday = new Date(year, monthIndex, day);
+
+    const today = new Date();
+
+    if (birthday < today) {
+        birthday = addYears(birthday, 1);
+    }
+    const daysLeft = differenceInCalendarDays(birthday, today);
+    const weeksLeft = Math.ceil(daysLeft / 7);
+
+    return weeksLeft;
+};
 
 const Page = () => {
     const router = useRouter();
@@ -220,7 +238,7 @@ const Page = () => {
                                         display: 'none'
                                     },
                                 }}>
-                                    12 Weeks to go..
+                                    {calculateWeeksLeft(birthday.date, birthday.month)} Weeks to go..
                                 </Typography>
                             </Grid>
                         </Grid>
