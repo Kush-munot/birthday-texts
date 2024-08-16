@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, TextField, Button, Snackbar, Alert } from '@mui/material';
+import { useRouter } from 'next/navigation';
 
 const Signup = () => {
+    const router = useRouter();
     const [phoneNumber, setPhoneNumber] = useState('');
     const [otp, setOtp] = useState('');
     const [smsSent, setSmsSent] = useState(false);
     const [open, setOpen] = useState(false);
     const [msg, setMsg] = useState('');
+    const [otpVerified, setOtpVerified] = useState('');
     const [severity, setSeverity] = useState('');
 
     const handlePhoneNumberChange = (event) => {
@@ -71,6 +74,8 @@ const Signup = () => {
                 setMsg('OTP Verified successfully!');
                 setOpen(true);
                 setSeverity('success')
+                localStorage.setItem('isLoggedIn', 'true');
+                router.push('/birthdays')
             } else {
                 setMsg('Invalid OTP. Please try again.');
                 setOpen(true);

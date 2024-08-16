@@ -84,6 +84,24 @@ const calculateWeeksLeft = (day, monthh) => {
     return weeksLeft;
 };
 
+const calculateDaysLeft = (day, monthh) => {
+    console.log(day, monthh);
+    const monthIndex = month.indexOf(monthh); // Assuming 'month' is an array of month names
+    console.log(monthIndex);
+    const year = new Date().getFullYear();
+    let birthday = new Date(year, monthIndex, day);
+
+    const today = new Date();
+
+    if (birthday < today) {
+        birthday = addYears(birthday, 1);
+    }
+
+    const daysLeft = differenceInCalendarDays(birthday, today);
+
+    return daysLeft;
+};
+
 const Page = () => {
     const router = useRouter();
     const [isLoggedIn, setIsLoggedIn] = useState();
@@ -113,7 +131,8 @@ const Page = () => {
             setSeverity('error');
             return;
         }
-
+        const calculatedDaysLeft = calculateDaysLeft(birthDate, birthMonth);
+        console.log(calculatedDaysLeft);
         const birthdayData = {
             phoneNumber: phoneNumber,
             birthdays: [
@@ -121,6 +140,7 @@ const Page = () => {
                     name: name,
                     date: birthDate,
                     month: birthMonth,
+                    daysLeft: calculatedDaysLeft,
                 }
             ]
         };
@@ -202,7 +222,11 @@ const Page = () => {
         <>
             {isLoggedIn ? (
                 <div style={{ padding: '8rem 1rem 5rem 2rem' }}>
-                    <Grid container spacing={2} sx={{ padding: '0 2% 5% 2%', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik' }}>
+                    <Grid container spacing={2} sx={{
+                        padding: '0 2% 0% 2%', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik', "@media (max-width:600px)": {
+                            padding: '4%'
+                        },
+                    }}>
                         <Grid md={8} sm={8} xs={12}>
                             <h2>Upcoming Birthdays 📆</h2>
                         </Grid>

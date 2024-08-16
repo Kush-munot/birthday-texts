@@ -33,7 +33,7 @@ export async function POST(req) {
     }
 }
 
-export async function GET(req) {
+/* export async function GET(req) {
     try {
         const url = new URL(req.url);
         const phoneNumber = url.searchParams.get('phoneNumber');
@@ -59,6 +59,43 @@ export async function GET(req) {
         return new Response(JSON.stringify({ success: true, birthdays: userBirthdays.birthdays }), {
             status: 200,
         });
+    } catch (error) {
+        console.error('Error retrieving birthdays:', error);
+        return new Response(JSON.stringify({ success: false, message: 'An error occurred' }), {
+            status: 500,
+        });
+    }
+} */
+
+export async function GET(req) {
+    try {
+        const url = new URL(req.url);
+        const phoneNumber = url.searchParams.get('phoneNumber');
+
+        const client = await clientPromise;
+        const db = client.db('nextjs-mongo');
+        const collection = db.collection('birthdays');
+
+        if (phoneNumber) {
+            const userBirthdays = await collection.findOne({ phoneNumber });
+
+            if (!userBirthdays) {
+                return new Response(JSON.stringify({ success: false, message: 'No birthdays found for this user' }), {
+                    status: 404,
+                });
+            }
+
+            return new Response(JSON.stringify({ success: true, birthdays: userBirthdays.birthdays }), {
+                status: 200,
+            });
+        } else {
+            // Return all data if no phoneNumber is specified
+            const allBirthdays = await collection.find({}).toArray();
+
+            return new Response(JSON.stringify({ success: true, data: allBirthdays }), {
+                status: 200,
+            });
+        }
     } catch (error) {
         console.error('Error retrieving birthdays:', error);
         return new Response(JSON.stringify({ success: false, message: 'An error occurred' }), {

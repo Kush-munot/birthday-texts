@@ -1,4 +1,5 @@
-import * as React from "react";
+"use client";
+import React, { useEffect, useState } from 'react';
 import {
     AppBar,
     Grid,
@@ -6,6 +7,8 @@ import {
     Toolbar,
     Button,
 } from "@mui/material";
+import { useRouter } from 'next/navigation';
+
 
 const btn = {
     marginRight: "20px",
@@ -14,19 +17,48 @@ const btn = {
     backgroundColor: "#1976d2",
     height: "40px",
     width: "auto",
-    textTransform:'none',
-    borderRadius:'25px',
-    width:'90px',
+    textTransform: 'none',
+    borderRadius: '25px',
+    width: '90px',
     "&:hover": {
         backgroundColor: "#915831",
         color: "white",
     },
     "@media (max-width:780px)": {
-        display:'none',
+        fontSize: '13px',
+        width: '70px',
+        height: '32px'
     },
 };
 
 export default function Navbar() {
+    const router = useRouter();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        console.log("into navbar")
+        const getCookie = (name) => {
+            const value = `${document.cookie}`;
+            const parts = value.split(`${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        };
+
+        const userCookie = getCookie('user');
+
+        if (!userCookie) {
+            setIsLoggedIn(false);
+        } else {
+            setIsLoggedIn(true);
+        }
+    },[isLoggedIn]);
+
+    const handleLogout = () => {
+        document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        localStorage.removeItem('isLoggedIn');
+        setIsLoggedIn(false);
+        router.push('/');
+    };
+
     return (
         <Grid container>
             <AppBar
@@ -78,7 +110,9 @@ export default function Navbar() {
                                 </Typography>
                             </Grid>
                         </a>
-                        <Button href="/signUp" sx={btn}>Log In</Button>
+                        {
+                            isLoggedIn ? <Button onClick={handleLogout} sx={btn}>Log Out</Button> : <Button sx={btn}>Log In</Button>
+                        }
                     </Grid>
 
                 </Toolbar>
