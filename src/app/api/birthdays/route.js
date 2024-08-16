@@ -1,5 +1,5 @@
 import clientPromise from '@/app/lib/mongodb';
-
+import { addYears, differenceInCalendarDays } from 'date-fns';
 export async function POST(req) {
     try {
         const { phoneNumber, birthdays } = await req.json();
@@ -67,6 +67,26 @@ export async function POST(req) {
     }
 } */
 
+const calculateDaysLeft = (day, month) => {
+    const monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    const monthIndex = monthNames.indexOf(month);
+    const year = new Date().getFullYear();
+    let birthday = new Date(year, monthIndex, day);
+
+    const today = new Date();
+
+    if (birthday < today) {
+        birthday = addYears(birthday, 1);
+    }
+
+    const daysLeft = differenceInCalendarDays(birthday, today);
+
+    return daysLeft;
+};
+
 export async function GET(req) {
     try {
         const url = new URL(req.url);
@@ -92,9 +112,31 @@ export async function GET(req) {
             // Return all data if no phoneNumber is specified
             const allBirthdays = await collection.find({}).toArray();
 
-            return new Response(JSON.stringify({ success: true, data: allBirthdays }), {
+            const result = allBirthdays.map(user => {
+                const upcomingBirthdays = user.birthdays
+                    .filter(birthday => calculateDaysLeft(birthday.date, birthday.month) <= 3)
+                    .map(birthday => ({
+                        name: birthday.name,
+                        day: birthday.date,
+                        month: birthday.month
+                    }));
+
+                if (upcomingBirthdays.length > 0) {
+                    return {
+                        phoneNumber: user.phoneNumber,
+                        birthdays: upcomingBirthdays
+                    };
+                }
+                return null;
+            }).filter(entry => entry !== null);
+
+            return new Response(JSON.stringify({ success: true, data: result }), {
                 status: 200,
             });
+
+            /* return new Response(JSON.stringify({ success: true, data: allBirthdays }), {
+                status: 200,
+            }); */
         }
     } catch (error) {
         console.error('Error retrieving birthdays:', error);

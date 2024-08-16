@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, TextField, Button, Snackbar, Alert } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import { isValidNumber, parsePhoneNumberFromString } from 'libphonenumber-js';
 
 const Signup = () => {
     const router = useRouter();
@@ -10,6 +11,7 @@ const Signup = () => {
     const [open, setOpen] = useState(false);
     const [msg, setMsg] = useState('');
     const [otpVerified, setOtpVerified] = useState('');
+    const [valid, setValid] = useState();
     const [severity, setSeverity] = useState('');
 
     const handlePhoneNumberChange = (event) => {
@@ -20,40 +22,60 @@ const Signup = () => {
         setOtp(event.target.value);
     };
 
+    const validatePhoneNumber = async () => {
+        const parsedPhoneNumber = parsePhoneNumberFromString(phoneNumber);
+        // console.log(parsedPhoneNumber.number);
+        setPhoneNumber(parsedPhoneNumber.number)
+        if (parsedPhoneNumber && isValidNumber(parsedPhoneNumber.number)) {
+            setValid(true);
+        } else {
+            setValid(false);
+            setMsg('Invalid phone number. Please check if you are entering proper Country Codes.');
+            setSeverity('error')
+            setOpen(true);
+        }
+        console.log(valid);
+    };
+
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (phoneNumber.length !== 10) {
-            setMsg('Invalid phone number. Please try again.');
+        await validatePhoneNumber();
+        if (!valid) {
+            setMsg('Invalid phone number. Please check if you are entering proper Country Codes.');
+            setSeverity('error')
             setOpen(true);
             return;
-        }
+        } else {
 
-        try {
-            const response = await fetch('/api/sendOtp', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ phoneNumber }),
-            });
+            try {
+                const response = await fetch('/api/sendOtp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ phoneNumber }),
+                });
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (data.success) {
-                setMsg('OTP Sent Successfully!!')
-                setSmsSent(true)
-                setOpen(true);
-                setSeverity('success')
-            } else {
-                setMsg('Failed to send OTP. Please try again.');
+                if (data.success) {
+                    setMsg('OTP Sent Successfully!!')
+                    setSmsSent(true)
+                    setOpen(true);
+                    setSeverity('success')
+                } else {
+                    setMsg('Failed to send OTP. Please try again.');
+                    setOpen(true);
+                    setSeverity('error')
+                }
+            } catch (error) {
+                setMsg('An error occurred. Please try again.');
                 setOpen(true);
                 setSeverity('error')
             }
-        } catch (error) {
-            setMsg('An error occurred. Please try again.');
-            setOpen(true);
-            setSeverity('error')
         }
+
     };
 
     const handleOtpSubmit = async (event) => {

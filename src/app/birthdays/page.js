@@ -67,9 +67,7 @@ const month = [
 const day = Array.from({ length: 31 }, (_, i) => i + 1);
 
 const calculateWeeksLeft = (day, monthh) => {
-    console.log(day, monthh);
     const monthIndex = month.indexOf(monthh);
-    console.log(monthIndex);
     const year = new Date().getFullYear();
     let birthday = new Date(year, monthIndex, day);
 
@@ -84,23 +82,6 @@ const calculateWeeksLeft = (day, monthh) => {
     return weeksLeft;
 };
 
-const calculateDaysLeft = (day, monthh) => {
-    console.log(day, monthh);
-    const monthIndex = month.indexOf(monthh); // Assuming 'month' is an array of month names
-    console.log(monthIndex);
-    const year = new Date().getFullYear();
-    let birthday = new Date(year, monthIndex, day);
-
-    const today = new Date();
-
-    if (birthday < today) {
-        birthday = addYears(birthday, 1);
-    }
-
-    const daysLeft = differenceInCalendarDays(birthday, today);
-
-    return daysLeft;
-};
 
 const Page = () => {
     const router = useRouter();
@@ -131,8 +112,7 @@ const Page = () => {
             setSeverity('error');
             return;
         }
-        const calculatedDaysLeft = calculateDaysLeft(birthDate, birthMonth);
-        console.log(calculatedDaysLeft);
+        
         const birthdayData = {
             phoneNumber: phoneNumber,
             birthdays: [
@@ -140,7 +120,6 @@ const Page = () => {
                     name: name,
                     date: birthDate,
                     month: birthMonth,
-                    daysLeft: calculatedDaysLeft,
                 }
             ]
         };
@@ -217,7 +196,7 @@ const Page = () => {
             fetchBirthdays();
         }
     }, [router, fetchBirthdays]);
-    console.log(birthdayData);
+
     return (
         <>
             {isLoggedIn ? (
