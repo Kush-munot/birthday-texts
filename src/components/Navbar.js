@@ -35,8 +35,24 @@ export default function Navbar() {
     const router = useRouter();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    const getCookie = (name) => {
+        const value = `${document.cookie}`;
+        const parts = value.split(`${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    };
+
     useEffect(() => {
-        console.log("into navbar")
+        const checkLoginStatus = () => {
+            const userCookie = getCookie('user');
+            setIsLoggedIn(!!userCookie);
+        };
+        checkLoginStatus(); // Initial check
+
+        const intervalId = setInterval(checkLoginStatus, 1000);
+
+        return () => clearInterval(intervalId);
+    }, [router]);
+    /* useEffect(() => {
         const getCookie = (name) => {
             const value = `${document.cookie}`;
             const parts = value.split(`${name}=`);
@@ -44,13 +60,8 @@ export default function Navbar() {
         };
 
         const userCookie = getCookie('user');
-
-        if (!userCookie) {
-            setIsLoggedIn(false);
-        } else {
-            setIsLoggedIn(true);
-        }
-    },[isLoggedIn]);
+        setIsLoggedIn(!!userCookie);  // Set the state based on cookie presence
+    }, []); */
 
     const handleLogout = () => {
         document.cookie = 'user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
@@ -111,7 +122,7 @@ export default function Navbar() {
                             </Grid>
                         </a>
                         {
-                            isLoggedIn ? <Button onClick={handleLogout} sx={btn}>Log Out</Button> : <Button sx={btn}>Log In</Button>
+                            isLoggedIn ? <Button onClick={handleLogout} sx={btn}>Log Out</Button> : <Button sx={btn} onClick={() => router.push('/birthdays')}>Log In</Button>
                         }
                     </Grid>
 

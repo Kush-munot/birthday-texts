@@ -11,7 +11,6 @@ const Signup = () => {
     const [open, setOpen] = useState(false);
     const [msg, setMsg] = useState('');
     const [otpVerified, setOtpVerified] = useState('');
-    const [valid, setValid] = useState();
     const [severity, setSeverity] = useState('');
 
     const handlePhoneNumberChange = (event) => {
@@ -24,30 +23,27 @@ const Signup = () => {
 
     const validatePhoneNumber = async () => {
         const parsedPhoneNumber = parsePhoneNumberFromString(phoneNumber);
-        // console.log(parsedPhoneNumber.number);
+        // console.log(parsedPhoneNumber);
+        let isValid = false;
         setPhoneNumber(parsedPhoneNumber.number)
         if (parsedPhoneNumber && isValidNumber(parsedPhoneNumber.number)) {
-            setValid(true);
+            isValid = true;
         } else {
-            setValid(false);
-            setMsg('Invalid phone number. Please check if you are entering proper Country Codes.');
-            setSeverity('error')
-            setOpen(true);
+            isValid = false;
         }
-        console.log(valid);
+        return isValid;
     };
 
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        await validatePhoneNumber();
-        if (!valid) {
+        const isValid = await validatePhoneNumber();
+        if (!isValid) {
             setMsg('Invalid phone number. Please check if you are entering proper Country Codes.');
             setSeverity('error')
             setOpen(true);
             return;
         } else {
-
             try {
                 const response = await fetch('/api/sendOtp', {
                     method: 'POST',
