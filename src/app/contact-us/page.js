@@ -1,0 +1,38 @@
+import { Typography } from '@mui/material'
+import React from 'react'
+
+const title = {
+    fontFamily: 'Rubik',
+    fontSize: '2rem',
+    fontWeight: '700'
+}
+
+const text = {
+    fontFamily: 'Rubik',
+    fontSize: '1rem',
+    margin: '1.5rem 0'
+}
+
+const page = () => {
+    return (
+        <div style={{ padding: '10% 2%' }}>
+            <Typography sx={title}>
+                Contact Us
+            </Typography>
+            <Typography sx={text}>
+                <b>Email</b> : Customersupport@birthdayremind.app
+            </Typography>
+            <Typography sx={text}>
+                <b>Phone number</b> : +91 8920924624
+            </Typography>
+            <Typography sx={text}>
+                <b>Address</b>: Flat no. 26, Vandana Apartments, Plot no. 42, IP Extension, Patparganj, Delhi 110092
+            </Typography>
+            <Typography sx={text}>
+                <b>Working hours</b> : Monday to Saturday – 0900 hrs - 1800 hrs IST
+            </Typography>
+        </div>
+    )
+}
+
+export default page
