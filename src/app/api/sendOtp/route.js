@@ -25,7 +25,7 @@ export async function POST(req, res) {
     console.log(`OTP sent to ${phoneNumber}: ${otp}`);
 
 
-    return new Response(JSON.stringify({ success: true, message: `Thank you for registering on BirthdayTexts. Your One-Time-Password is - ${otp}` }), {
+    return new Response(JSON.stringify({ success: true, message: `Thank you for registering on Birthdayremind. Your One-Time-Password is - ${otp}` }), {
         status: 200,
     });
 }
@@ -52,7 +52,7 @@ export async function POST(req, res) {
     await collection.insertOne({ phoneNumber, otp, createdAt: new Date() });
 
     // API URL and body
-    const messageBody = `Thank you for registering on BirthdayTexts. Your One-Time-Password is - ${otp}`;
+    const messageBody = `Thank you for registering on Birthdayremind. Your One-Time-Password is - ${otp}`;
     const apiUrl = `${process.env.API_BASE_URL}/${process.env.VENDOR_UID}/contact/send-message`;
     const fromPhoneNumberId = process.env.FROM_PHONE_NUMBER
     const requestBody = {
@@ -87,7 +87,7 @@ export async function POST(req, res) {
         console.log(`OTP sent to ${phoneNumber}: ${otp}`);
         console.log('WhatsApp API response:', responseData);
 
-        return new Response(JSON.stringify({ success: true, message: `Thank you for registering on BirthdayTexts. Your One-Time-Password is - ${otp}` }), {
+        return new Response(JSON.stringify({ success: true, message: `Thank you for registering on Birthdayremind. Your One-Time-Password is - ${otp}` }), {
             status: 200,
         });
     } catch (error) {

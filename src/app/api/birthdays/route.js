@@ -3,6 +3,7 @@ import { addYears, differenceInCalendarDays } from 'date-fns';
 export async function POST(req) {
     try {
         const { phoneNumber, birthdays } = await req.json();
+        console.log(phoneNumber);
 
         if (!phoneNumber || !birthdays || !Array.isArray(birthdays)) {
             return new Response(JSON.stringify({ message: 'Phone number and birthdays array are required' }), {
@@ -76,6 +77,8 @@ const calculateDaysLeft = (day, month) => {
     const year = new Date().getFullYear();
     let birthday = new Date(year, monthIndex, day);
 
+    console.log(new Date(year, monthIndex, day));
+
     const today = new Date();
 
     if (birthday < today) {
@@ -90,13 +93,15 @@ const calculateDaysLeft = (day, month) => {
 export async function GET(req) {
     try {
         const url = new URL(req.url);
-        const phoneNumber = url.searchParams.get('phoneNumber');
+        let phoneNumber = url.searchParams.get('phoneNumber');
 
         const client = await clientPromise;
         const db = client.db('nextjs-mongo');
         const collection = db.collection('birthdays');
 
         if (phoneNumber) {
+            phoneNumber = "+" + phoneNumber.split(" ")[1]
+
             const userBirthdays = await collection.findOne({ phoneNumber });
 
             if (!userBirthdays) {
@@ -111,6 +116,7 @@ export async function GET(req) {
         } else {
             // Return all data if no phoneNumber is specified
             const allBirthdays = await collection.find({}).toArray();
+            // console.log(allBirthdays);
 
             const result = allBirthdays.map(user => {
                 const upcomingBirthdays = user.birthdays
@@ -120,6 +126,8 @@ export async function GET(req) {
                         day: birthday.date,
                         month: birthday.month
                     }));
+                
+                console.log(upcomingBirthdays);
 
                 if (upcomingBirthdays.length > 0) {
                     return {
