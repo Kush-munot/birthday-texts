@@ -4,6 +4,7 @@ import styles from "./page.module.css";
 import { data01, data02, data03 } from "./utils/sliderData";
 import Signup from "@/components/Signup";
 import { useEffect, useState } from "react";
+import Pricing from "@/components/Pricing";
 
 
 const btn = {
@@ -40,7 +41,7 @@ export default function Home() {
       <main className={styles.main}>
         <section sx={{ padding: '20px 0' }}>
           <div className="container">
-            <Box sx={{ padding: '4rem 0', display: 'grid', justifyContent: 'center' }}>
+            <Box sx={{ padding: '3.5rem 0', display: 'grid', justifyContent: 'center' }}>
               <Typography sx={{ fontFamily: 'Rubik', fontSize: '3rem', letterSpacing: '3px', fontWeight: '600' }}>Never Miss a Birthday 🎂</Typography>
               <p>Bye-bye, Facebook, LinkedIn. Get WhatsApp reminders for birthdays, for free.</p>
             </Box>
@@ -81,8 +82,9 @@ export default function Home() {
               </Stack>
             </marquee>
           </div>
-          <Box sx={{ padding: '4rem 0', display: 'grid', justifyContent: 'center' }}>
+          <Box sx={{ padding: '1rem 0', display: 'grid', justifyContent: 'center' }}>
             <Signup />
+            <Pricing/>
           </Box>
         </section>
       </main>

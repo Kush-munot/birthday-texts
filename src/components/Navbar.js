@@ -117,7 +117,7 @@ export default function Navbar() {
                                         fontFamily: 'Rubik'
                                     }}
                                 >
-                                    BirthdayTexts🎂
+                                    Birthdayremind🎂
                                 </Typography>
                             </Grid>
                         </a>

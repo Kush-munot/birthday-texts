@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Box, TextField, Button, Snackbar, Alert } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { isValidNumber, parsePhoneNumberFromString } from 'libphonenumber-js';
+import Image from 'next/image';
+
 
 const Signup = () => {
     const router = useRouter();
@@ -23,9 +25,7 @@ const Signup = () => {
 
     const validatePhoneNumber = async () => {
         const parsedPhoneNumber = parsePhoneNumberFromString(phoneNumber);
-        // console.log(parsedPhoneNumber);
         let isValid = false;
-        setPhoneNumber(parsedPhoneNumber.number)
         if (parsedPhoneNumber && isValidNumber(parsedPhoneNumber.number)) {
             isValid = true;
         } else {
@@ -38,6 +38,7 @@ const Signup = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const isValid = await validatePhoneNumber();
+        console.log(phoneNumber);
         if (!isValid) {
             setMsg('Invalid phone number. Please check if you are entering proper Country Codes.');
             setSeverity('error')
@@ -112,7 +113,7 @@ const Signup = () => {
 
     return (
         <div>
-            <Box sx={{ width: '300px', margin: '0 auto', padding: '2px 20px 20px 20px', textAlign: 'center', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik' }}>
+            <Box sx={{ width: '300px', margin: '4% auto', padding: '2px 20px 20px 20px', textAlign: 'center', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik' }}>
                 <form onSubmit={handleSubmit}>
                     <p>Sign in or sign up for your free account:</p>
                     <TextField
@@ -145,12 +146,25 @@ const Signup = () => {
                     </form>
                 )}
 
+
                 <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                     <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
                         {msg}
                     </Alert>
                 </Snackbar>
             </Box>
+            <Image
+                src="/desktopMockup.png"
+                alt="Desktop Preview"
+                sizes="100vw"
+                style={{
+                    width: '100%',
+                    height: 'auto',
+                }}
+                width={500}
+                height={300}
+            />
+
         </div>
     )
 }
