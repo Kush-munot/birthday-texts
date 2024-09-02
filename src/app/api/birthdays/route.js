@@ -100,7 +100,7 @@ export async function GET(req) {
         const collection = db.collection('birthdays');
 
         if (phoneNumber) {
-            phoneNumber = "+" + phoneNumber.split(" ")[1]
+            phoneNumber = "+" + phoneNumber
 
             const userBirthdays = await collection.findOne({ phoneNumber });
 

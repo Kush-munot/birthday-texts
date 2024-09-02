@@ -2,7 +2,10 @@ import clientPromise from '@/app/lib/mongodb';
 
 export async function POST(req) {
     try {
-        const { phoneNumber, otp } = await req.json();
+        let { phoneNumber, otp } = await req.json();
+        phoneNumber = phoneNumber.replace("+", "");
+
+        console.log(phoneNumber, otp);
 
         if (!phoneNumber || !otp) {
             return new Response(JSON.stringify({ message: 'Phone number and OTP are required' }), {
