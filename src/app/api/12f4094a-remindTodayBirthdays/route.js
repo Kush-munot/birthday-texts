@@ -23,25 +23,44 @@ const calculateDaysLeft = (day, month) => {
 };
 
 const sendMessage = async (phoneNumber, message) => {
-    try {
-        const response = await fetch('https://your-sms-api.com/send', {
+    const apiUrl = `${process.env.API_BASE_URL}/${process.env.VENDOR_UID}/contact/send-template-message?token=${process.env.TOKEN}`;
+    const requestBody = {
+        "from_phone_number_id": `${process.env.FROM_PHONE_NUMBER_ID}`,
+        "phone_number": phoneNumber,
+        "template_name": "today_birthday",
+        "template_language": "en",
+        "field_1": message,
+      };
+      try {
+        const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                // Add any other required headers here, such as Authorization
             },
-            body: JSON.stringify({
-                to: phoneNumber,
-                message: message,
-            }),
+            body: JSON.stringify(requestBody),
         });
 
+        const responseData = await response.json();
+
         if (!response.ok) {
-            throw new Error(`Failed to send message: ${response.statusText}`);
+            console.error('Failed to send message:', responseData);
+            return new Response(JSON.stringify({ success: false, message: 'Failed to send OTP message' }), {
+                status: 500,
+            });
         }
 
-        console.log(`Message sent to ${phoneNumber}: ${response.status}`);
+        console.log(`Reminder Message sent to ${phoneNumber}: ${message}`);
+        console.log('WhatsApp API response:', responseData);
+
+        return new Response(JSON.stringify({ success: true, message: `Reminder Message Sent` }), {
+            status: 200,
+        });
     } catch (error) {
-        console.error(`Error sending message to ${phoneNumber}:`, error);
+        console.error('Error sending message:', error);
+        return new Response(JSON.stringify({ success: false, message: 'Error sending Reminder Message' }), {
+            status: 500,
+        });
     }
 };
 
@@ -56,7 +75,7 @@ export async function GET(req) {
 
         const result = allBirthdays.map(user => {
             const upcomingBirthdays = user.birthdays
-                .filter(birthday => calculateDaysLeft(birthday.date, birthday.month) <= 3)
+                .filter(birthday => calculateDaysLeft(birthday.date, birthday.month) <= 1)
                 .map(birthday => ({
                     name: birthday.name,
                     day: birthday.date,
@@ -73,9 +92,10 @@ export async function GET(req) {
         }).filter(entry => entry !== null);
 
         for (const user of result) {
-            const { phoneNumber, birthdays } = user;
-            const message = `Hey, I am Bixyy from Birthdayremind.app,\nFollowing birthdays are about to come:\n` +
-                birthdays.map(b => `${b.name} - ${b.day} ${b.month}`).join('\n');
+            let { phoneNumber, birthdays } = user;
+            phoneNumber = phoneNumber.replace("+", "");
+            console.log(phoneNumber);
+            const message = birthdays.map(b => `${b.name} - ${b.day} ${b.month}`).join(', ');
             await sendMessage(phoneNumber, message);
         }
 
