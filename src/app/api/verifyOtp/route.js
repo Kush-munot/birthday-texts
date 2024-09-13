@@ -1,4 +1,6 @@
 import clientPromise from '@/app/lib/mongodb';
+import { Paddle, Environment, LogLevel } from "@paddle/paddle-node-sdk";
+
 
 export async function POST(req) {
     try {
@@ -17,6 +19,7 @@ export async function POST(req) {
         const db = client.db('nextjs-mongo');
 
         const collection = db.collection('otps');
+        const bday_collection = db.collection('birthdays');
         const otpRecord = await collection.findOne({ phoneNumber, otp });
 
         if (!otpRecord) {
@@ -29,12 +32,31 @@ export async function POST(req) {
 
         // Optionally, remove the OTP after verification
         await collection.deleteOne({ phoneNumber, otp });
+        
+        const paddle = new Paddle(process.env.PADDLE_API_KEY, { environment: Environment.sandbox, logLevel: LogLevel.verbose })
+        const existingCustomers = await paddle.customers.list({ email: [`${phoneNumber}@gmail.com`] }).next()
+        let customerId;
+        if (!existingCustomers.length) {
+            const customer = await paddle.customers.create({ email: `${phoneNumber}@gmail.com` });
+            customerId = customer.id;
+        } else {
+            customerId = existingCustomers[0].id;
+        }
         const cookie = `user=${phoneNumber}; Max-Age=${60 * 60 * 24}; Path=/; SameSite=Lax;`;
+        console.log(customerId);
 
+        await bday_collection.insertOne({
+            phoneNumber: `+${phoneNumber}`,
+            isSubscribed: false,
+            customerId: customerId,
+            birthdays: []
+        });
+
+        
         return new Response(JSON.stringify({ success: true, message: 'OTP verified successfully!', key: phoneNumber }), {
             status: 200,
             headers: {
-                'Set-Cookie': cookie,
+                'Set-Cookie': [cookie],
             },
         });
     } catch (error) {

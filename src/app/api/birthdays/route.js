@@ -1,6 +1,6 @@
 import clientPromise from '@/app/lib/mongodb';
 import { addYears, differenceInCalendarDays } from 'date-fns';
-export async function POST(req) {
+/* export async function POST(req) {
     try {
         const { phoneNumber, birthdays } = await req.json();
         console.log(phoneNumber);
@@ -32,7 +32,7 @@ export async function POST(req) {
             status: 500,
         });
     }
-}
+} */
 
 /* export async function GET(req) {
     try {
@@ -90,6 +90,73 @@ const calculateDaysLeft = (day, month) => {
     return daysLeft;
 };
 
+export async function POST(req) {
+    try {
+        let { phoneNumber, birthdays } = await req.json();
+        phoneNumber = "+" + phoneNumber
+
+        if (!phoneNumber || !birthdays || !Array.isArray(birthdays)) {
+            return new Response(JSON.stringify({ message: 'Phone number and birthdays array are required' }), {
+                status: 400,
+            });
+        }
+
+        const client = await clientPromise;
+        const db = client.db('nextjs-mongo');
+        const collection = db.collection('birthdays');
+
+        // Find the user's existing birthdays
+        const user = await collection.findOne({ phoneNumber });
+
+        let existingBirthdays = [];
+
+        // If the user exists, use their existing birthdays, otherwise initialize an empty array
+        if (user && user.birthdays) {
+            existingBirthdays = user.birthdays;
+        }
+
+        console.log("Existing Birthdays", existingBirthdays);
+
+        // Filter out any duplicates (based on name, date, and month)
+        const newBirthdays = birthdays.filter(newBday =>
+            !existingBirthdays.some(existingBday =>
+                existingBday.name === newBday.name &&
+                existingBday.date === newBday.date &&
+                existingBday.month === newBday.month
+            )
+        );
+        console.log("new Birthdays - ", newBirthdays);
+
+        // Append the filtered birthdays (only new ones)
+        if (newBirthdays.length > 0) {
+            if (user) {
+                // User exists, update their document
+                await collection.updateOne(
+                    { phoneNumber },
+                    { $push: { birthdays: { $each: newBirthdays } } }
+                );
+            } else {
+                // User does not exist, create a new document
+                await collection.insertOne({
+                    phoneNumber,
+                    birthdays: newBirthdays
+                });
+            }
+        }
+
+
+
+        return new Response(JSON.stringify({ success: true, message: 'Birthdays stored successfully!' }), {
+            status: 200,
+        });
+    } catch (error) {
+        console.error('Error storing birthdays:', error);
+        return new Response(JSON.stringify({ success: false, message: 'An error occurred' }), {
+            status: 500,
+        });
+    }
+}
+
 export async function GET(req) {
     try {
         const url = new URL(req.url);
@@ -103,6 +170,7 @@ export async function GET(req) {
             phoneNumber = "+" + phoneNumber
 
             const userBirthdays = await collection.findOne({ phoneNumber });
+            console.log(userBirthdays);
 
             if (!userBirthdays) {
                 return new Response(JSON.stringify({ success: false, message: 'No birthdays found for this user' }), {
@@ -126,7 +194,7 @@ export async function GET(req) {
                         day: birthday.date,
                         month: birthday.month
                     }));
-                
+
                 console.log(upcomingBirthdays);
 
                 if (upcomingBirthdays.length > 0) {

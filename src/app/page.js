@@ -2,9 +2,9 @@
 import { Box, Button, ButtonGroup, Stack, Typography } from "@mui/material";
 import styles from "./page.module.css";
 import { data01, data02, data03 } from "./utils/sliderData";
-import Signup from "@/components/Signup";
+import Signup from "../components/Signup";
 import { useEffect, useState } from "react";
-import Pricing from "@/components/Pricing";
+import Pricing from "../components/Pricing";
 
 
 const btn = {

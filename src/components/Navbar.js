@@ -122,7 +122,7 @@ export default function Navbar() {
                             </Grid>
                         </a>
                         {
-                            isLoggedIn ? <Button onClick={handleLogout} sx={btn}>Log Out</Button> : <Button sx={btn} onClick={() => router.push('/birthdays')}>Log In</Button>
+                            isLoggedIn ? <Button onClick={handleLogout} sx={btn}>Log Out</Button> : <Button sx={btn} onClick={() => router.push('/')}>Log In</Button>
                         }
                     </Grid>
 

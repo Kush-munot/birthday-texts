@@ -42,6 +42,9 @@ const Footer = () => {
                     <Box sx={{ padding: '0.5rem 0' }}>
                         <Link sx={link} href='/terms-and-conditions'>Terms and Conditions</Link>
                     </Box>
+                    <Box sx={{ padding: '0.5rem 0' }}>
+                        <Link sx={link} href='/pricing'>Pricing</Link>
+                    </Box>
                 </Grid>
 
             </Grid>

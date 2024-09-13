@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+"use client";
 import { Button, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-
+import { initializePaddle } from "@paddle/paddle-js";
 
 const title = {
     fontFamily: 'Rubik',
@@ -29,8 +31,78 @@ const pro_plan = [
     "Visualize upcoming birthdays",
     "Never check Facebook Birthdays ever again",
 ];
+const page = () => {
+    const [paddle, setPaddle] = useState();
+    const [custId, setCustId] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
 
-const Pricing = () => {
+    const getCustomerId = useCallback(async () => {
+        const apiUrl = `/api/customerId?phoneNumber=${phoneNumber}`;
+
+        const response = await fetch(apiUrl);
+
+        if (response.ok) {
+            const data = await response.json();
+            setCustId(data.customerId);
+        } else {
+            console.error('Error fetching customer ID:', response.statusText);
+        }
+    });
+
+    useEffect(() => {
+        const getCookie = (name) => {
+            const value = `${document.cookie}`;
+            const parts = value.split(`${name}=`);
+            console.log(parts[1]);
+            setPhoneNumber(parts[1]);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        };
+
+        const userCookie = getCookie('user');
+        getCustomerId();
+    }, [phoneNumber, getCustomerId]);
+
+    useEffect(() => {
+        void initializePaddle({
+            environment: "sandbox",
+            token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_ID,
+        }).then((paddleInstance) => {
+            if (paddleInstance) {
+                setPaddle(paddleInstance);
+            }
+        });
+    }, [])
+
+    const openCheckoutMonthly = () => {
+        if (custId) {
+            paddle?.Checkout.open({
+                items: [
+                    { priceId: process.env.NEXT_PUBLIC_PADDLE_M_PRICE_ID, quantity: 1 },
+                ],
+                settings: {
+                    successUrl: "https://twenty-rings-return.loca.lt/success",
+                },
+                customer: {
+                    id: custId,
+                },
+            });
+        }
+    };
+    const openCheckoutYearly = () => {
+        if (custId) {
+            paddle?.Checkout.open({
+                items: [
+                    { priceId: process.env.NEXT_PUBLIC_PADDLE_Y_PRICE_ID, quantity: 1 },
+                ],
+                settings: {
+                    successUrl: "https://twenty-rings-return.loca.lt/success",
+                },
+                customer: {
+                    id: custId,
+                },
+            });
+        }
+    };
     return (
         <div style={{ padding: '10% 2%' }}>
             <Typography sx={title}>Pricing</Typography>
@@ -63,26 +135,23 @@ const Pricing = () => {
                             </ListItem>
                         ))}
                     </List>
-                    <Link href='/pricing'>
-
-                        <Button sx={{
-                            borderRadius: "5px",
-                            border: 0,
-                            color: "white",
-                            textTransform: 'none',
+                    <Button sx={{
+                        borderRadius: "5px",
+                        border: 0,
+                        color: "white",
+                        textTransform: 'none',
+                        backgroundColor: '#000',
+                        opacity: '60%',
+                        fontSize: '1.2rem',
+                        width: '75%',
+                        padding: "10px",
+                        m: '4% 10%',
+                        "&:hover": {
                             backgroundColor: '#000',
-                            opacity: '60%',
-                            fontSize: '1.2rem',
-                            width: '75%',
-                            padding: "10px",
-                            m: '4% 10%',
-                            "&:hover": {
-                                backgroundColor: '#000',
-                                color: 'white',
-                            },
+                            color: 'white',
+                        },
 
-                        }} > Start for Free </Button>
-                    </Link>
+                    }} onClick={openCheckoutMonthly} > Subscribe Monthly Plan </Button>
                 </Grid>
                 <Grid item lg={5.5} md={5.5} xs={11} sx={{ height: 'auto', border: '2px solid #1976d2', borderRadius: '20px', marginLeft: '3%', backgroundColor: '#ffff', mt: '5px' }}>
                     <Button sx={{
@@ -111,25 +180,23 @@ const Pricing = () => {
                             </ListItem>
                         ))}
                     </List>
-                    <Link href='/pricing'>
-                        <Button sx={{
-                            borderRadius: "5px",
-                            border: 0,
-                            color: "white",
-                            textTransform: 'none',
+                    <Button sx={{
+                        borderRadius: "5px",
+                        border: 0,
+                        color: "white",
+                        textTransform: 'none',
+                        backgroundColor: '#000',
+                        opacity: '60%',
+                        fontSize: '1.2rem',
+                        width: '75%',
+                        padding: "10px",
+                        m: '4% 10%',
+                        "&:hover": {
                             backgroundColor: '#000',
-                            opacity: '60%',
-                            fontSize: '1.2rem',
-                            width: '75%',
-                            padding: "10px",
-                            m: '4% 10%',
-                            "&:hover": {
-                                backgroundColor: '#000',
-                                color: 'white',
-                            },
+                            color: 'white',
+                        },
 
-                        }} > Start for Free </Button>
-                    </Link>
+                    }} onClick={openCheckoutYearly}> Subscribe Yearly Plan </Button>
                 </Grid>
             </Grid>
 
@@ -137,4 +204,4 @@ const Pricing = () => {
     )
 }
 
-export default Pricing
+export default page

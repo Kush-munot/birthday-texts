@@ -4,6 +4,7 @@ import { Alert, Box, Button, FormControl, Grid, InputLabel, MenuItem, Modal, Sel
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react'
 import { differenceInCalendarDays, addYears, format } from 'date-fns';
+import { initializePaddle } from "@paddle/paddle-js";
 
 
 const btn = {
@@ -93,6 +94,7 @@ const Page = () => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [msg, setMsg] = useState('');
     const [severity, setSeverity] = useState('');
+    const [isSubscribed, setIsSubscribed] = useState(false);
     const [birthdayData, setBirthdayData] = useState([]);
 
 
@@ -104,6 +106,28 @@ const Page = () => {
     const handleBirthMonth = (event) => setBirthMonth(event.target.value);
     const handleName = (event) => setName(event.target.value);
 
+    const fetchBirthdays = useCallback(async () => {
+        try {
+            const response = await fetch(`/api/birthdays?phoneNumber=${phoneNumber}`, {
+                method: 'GET',
+            });
+
+            const data = await response.json();
+
+            if (data.isSubscribed) {
+                setIsSubscribed(true);
+            }
+
+            if (isLoggedIn && data.success) {
+                setBirthdayData(data.birthdays);
+            }
+        } catch (error) {
+            console.error('Error fetching birthdays:', error);
+            setMsg('An error occurred. Please try again.');
+            setOpenSnackbar(true);
+            setSeverity('error');
+        }
+    }, [phoneNumber]); 
 
     const handleSubmit = async () => {
         if (!birthDate || !birthMonth) {
@@ -112,18 +136,20 @@ const Page = () => {
             setSeverity('error');
             return;
         }
-        
+    
+        const newBirthday = {
+            name: name,
+            date: birthDate,
+            month: birthMonth,
+        };
+    
         const birthdayData = {
             phoneNumber: phoneNumber,
-            birthdays: [
-                {
-                    name: name,
-                    date: birthDate,
-                    month: birthMonth,
-                }
-            ]
+            birthdays: [newBirthday]
         };
 
+        console.log(birthdayData);
+    
         try {
             const response = await fetch('/api/birthdays', {
                 method: 'POST',
@@ -132,15 +158,13 @@ const Page = () => {
                 },
                 body: JSON.stringify(birthdayData),
             });
-
+    
             const data = await response.json();
             if (data.success) {
                 setMsg('Birthday added successfully!');
                 setOpenSnackbar(true);
                 setSeverity('success');
-                handleClose();
-                setBirthdate('');
-                setBirthMonth('');
+                handleClose();  
                 fetchBirthdays();
             } else {
                 setMsg('Failed to add birthday.');
@@ -155,33 +179,15 @@ const Page = () => {
         }
     };
 
-    const fetchBirthdays = useCallback(async () => {
-        try {
-            const response = await fetch(`/api/birthdays?phoneNumber=${phoneNumber}`, {
-                method: 'GET',
-            });
-
-            const data = await response.json();
-
-            if (isLoggedIn && data.success) {
-                setBirthdayData(data.birthdays);
-            } else {
-                setMsg('No birthdays found.');
-                setOpenSnackbar(true);
-                setSeverity('error')
-            }
-        } catch (error) {
-            console.error('Error fetching birthdays:', error);
-            setMsg('An error occurred. Please try again.');
-            setOpenSnackbar(true);
-            setSeverity('error');
-        }
-    }, [phoneNumber]);
+    const openCheckout = () => {
+        router.push('/pricing')
+    }
 
     useEffect(() => {
         const getCookie = (name) => {
             const value = `${document.cookie}`;
             const parts = value.split(`${name}=`);
+            console.log(parts[1]);
             setPhoneNumber(parts[1]);
             if (parts.length === 2) return parts.pop().split(';').shift();
         };
@@ -210,7 +216,15 @@ const Page = () => {
                             <h2>Upcoming Birthdays 📆</h2>
                         </Grid>
                         <Grid md={4} sm={4} xs={12}>
-                            <Button onClick={handleOpen} sx={btn}>+ Add Birthday</Button>
+                            {/* <Button onClick={handleOpen} sx={btn}>+ Add Birthday</Button> */}
+                            {
+                                isSubscribed ?
+                                    <Button onClick={handleOpen} sx={btn}>+ Add Birthday</Button>
+                                    :
+                                    <div>
+                                        <Button onClick={openCheckout} sx={btn}>Subscribe</Button>
+                                    </div>
+                            }
                         </Grid>
                     </Grid>
                     {birthdayData.map((birthday, index) => (

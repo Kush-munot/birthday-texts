@@ -23,6 +23,8 @@ export async function POST(req, res) {
     const collection = db.collection('otps');
     await collection.insertOne({ phoneNumber, otp, createdAt: new Date() });
 
+    console.log(otp);
+
     // API URL and body
     const apiUrl = `${process.env.API_BASE_URL}/${process.env.VENDOR_UID}/contact/send-template-message?token=${process.env.TOKEN}`;
     const requestBody = {
@@ -32,12 +34,14 @@ export async function POST(req, res) {
         "template_language": "en",
         "field_1": otp,
         "button_0": otp
-      };
+    };
 
-    console.log(apiUrl);
+    return new Response(JSON.stringify({ success: true, message: `Thank you for registering on Birthdayremind. Your One-Time-Password is - ${otp}` }), {
+        status: 200,
+    });
 
     // Send OTP message via WhatsApp API
-    try {
+    /* try {
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
@@ -67,5 +71,5 @@ export async function POST(req, res) {
         return new Response(JSON.stringify({ success: false, message: 'Error sending OTP message' }), {
             status: 500,
         });
-    }
+    } */
 }
