@@ -114,6 +114,8 @@ const Page = () => {
 
             const data = await response.json();
 
+            console.log("Data.isSubs", data);
+
             if (data.isSubscribed) {
                 setIsSubscribed(true);
             }
@@ -127,7 +129,7 @@ const Page = () => {
             setOpenSnackbar(true);
             setSeverity('error');
         }
-    }, [phoneNumber]); 
+    }, [phoneNumber]);
 
     const handleSubmit = async () => {
         if (!birthDate || !birthMonth) {
@@ -136,20 +138,20 @@ const Page = () => {
             setSeverity('error');
             return;
         }
-    
+
         const newBirthday = {
             name: name,
             date: birthDate,
             month: birthMonth,
         };
-    
+
         const birthdayData = {
             phoneNumber: phoneNumber,
             birthdays: [newBirthday]
         };
 
         console.log(birthdayData);
-    
+
         try {
             const response = await fetch('/api/birthdays', {
                 method: 'POST',
@@ -158,13 +160,13 @@ const Page = () => {
                 },
                 body: JSON.stringify(birthdayData),
             });
-    
+
             const data = await response.json();
             if (data.success) {
                 setMsg('Birthday added successfully!');
                 setOpenSnackbar(true);
                 setSeverity('success');
-                handleClose();  
+                handleClose();
                 fetchBirthdays();
             } else {
                 setMsg('Failed to add birthday.');
@@ -221,9 +223,7 @@ const Page = () => {
                                 isSubscribed ?
                                     <Button onClick={handleOpen} sx={btn}>+ Add Birthday</Button>
                                     :
-                                    <div>
-                                        <Button onClick={openCheckout} sx={btn}>Subscribe</Button>
-                                    </div>
+                                    <Button onClick={openCheckout} sx={btn}>Subscribe</Button>
                             }
                         </Grid>
                     </Grid>

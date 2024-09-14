@@ -11,12 +11,26 @@ const title = {
     fontWeight: '700',
     margin: '1% 0'
 }
-const title1 = {
+const btn = {
+    color: "white",
     fontFamily: 'Rubik',
-    fontSize: '1.5rem',
-    fontWeight: '700',
-    margin: '2% 0'
-}
+    backgroundColor: "#1976d2",
+    height: "40px",
+    width: "100%",
+    textTransform: 'none',
+    borderRadius: '25px',
+    margin: '1.2rem 0 0 2rem',
+    float: 'right',
+    "&:hover": {
+        backgroundColor: "#915831",
+        color: "white",
+    },
+    "@media (max-width:610px)": {
+        float: 'left',
+        margin: '1.2rem 0 0 0.5rem',
+
+    },
+};
 
 const text = {
     fontFamily: 'Rubik',
@@ -80,7 +94,7 @@ const page = () => {
                     { priceId: process.env.NEXT_PUBLIC_PADDLE_M_PRICE_ID, quantity: 1 },
                 ],
                 settings: {
-                    successUrl: "https://twenty-rings-return.loca.lt/success",
+                    successUrl: "https://lived-elect-managed-go.trycloudflare.com/birthdays",
                 },
                 customer: {
                     id: custId,
@@ -95,13 +109,19 @@ const page = () => {
                     { priceId: process.env.NEXT_PUBLIC_PADDLE_Y_PRICE_ID, quantity: 1 },
                 ],
                 settings: {
-                    successUrl: "https://twenty-rings-return.loca.lt/success",
+                    successUrl: "https://lived-elect-managed-go.trycloudflare.com/birthdays",
                 },
                 customer: {
                     id: custId,
                 },
             });
         }
+    };
+    const openCheckoutPaused = () => {
+        console.log("paused clicked");
+    };
+    const openCheckoutResumed = () => {
+        console.log("resumed clicked");
     };
     return (
         <div style={{ padding: '10% 2%' }}>
@@ -199,6 +219,20 @@ const page = () => {
                     }} onClick={openCheckoutYearly}> Subscribe Yearly Plan </Button>
                 </Grid>
             </Grid>
+
+            <Grid container spacing={2} sx={{
+                padding: '0 2% 0% 2%', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik', "@media (max-width:600px)": {
+                    padding: '4%'
+                },
+            }}>
+                <Grid md={8} sm={8} xs={12}>
+                    <Button onClick={openCheckoutPaused} sx={btn}>Pause Subscription</Button>
+                </Grid>
+                <Grid md={4} sm={4} xs={12}>
+                    <Button onClick={openCheckoutResumed} sx={btn}>Resume Subscription</Button>
+                </Grid>
+            </Grid>
+
 
         </div>
     )
