@@ -26,29 +26,18 @@ export async function POST(request) {
         let db = client.db('nextjs-mongo');
         let collection = db.collection('birthdays');
         let customerId;
+        let subsId;
         switch (eventData.eventType) {
             case EventName.SubscriptionCreated:
-                customerId = eventData.data;
-                await collection.updateOne(
+                customerId = eventData.data.customerId; 
+                subsId = eventData.data.id; 
+                console.log("SUBS_ID", subsId);
+                console.log("CUST_ID", customerId);
+                const updatez = await collection.updateOne(
                     { customerId },
-                    { $set: { isSubscribed: true } }
+                    { $set: { isSubscribed: true, subscriptionId: subsId } }
                 );
-                console.log("Event Data - ", eventData.data);
-                break;
-            case EventName.SubscriptionPaused:
-                customerId = eventData.data;
-                await collection.updateOne(
-                    { customerId },
-                    { $set: { isSubscribed: false } }
-                );
-                console.log("Event Data - ", eventData.data);
-                break;
-            case EventName.SubscriptionResumed:
-                customerId = eventData.data;
-                await collection.updateOne(
-                    { customerId },
-                    { $set: { isSubscribed: false } }
-                );
+                console.log("UPDATE", updatez);
                 console.log("Event Data - ", eventData.data);
                 break;
             default:
