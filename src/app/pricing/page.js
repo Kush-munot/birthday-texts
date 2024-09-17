@@ -156,36 +156,40 @@ const page = () => {
                 }),
             });
 
-            
+
             const data = await response.json();
+            console.log(response.ok);
             if (!response.ok) {
                 setMsg(`Error: ${response.status} ${response.statusText}`);
                 setOpenSnackbar(true);
                 setSeverity('error');
+                throw new Error(`Error: ${response.status} ${response.statusText}`)
+            } else {
+                // Now make the second API call to /api/updateSubscription
+                const updateSubscriptionResponse = await fetch('/api/updateSubscription', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        subscriptionId: subsId,
+                        isSubscribed: false
+                    }),
+                });
+
+                console.log(updateSubscriptionResponse.ok);
+
+                if (!updateSubscriptionResponse.ok) {
+                    setMsg(`Error: ${updateSubscriptionResponse.status} ${updateSubscriptionResponse.statusText}`);
+                    setOpenSnackbar(true);
+                    setSeverity('error');
+                } else {
+                    setMsg('Subscription paused successfully!!', data);
+                    setOpenSnackbar(true);
+                    setSeverity('success');
+                }
+
             }
-            console.log('Subscription paused successfully.', data);
-
-            // Now make the second API call to /api/updateSubscription
-            const updateSubscriptionResponse = await fetch('/api/updateSubscription', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    subscriptionId: subsId,
-                    isSubscribed: false
-                }),
-            });
-
-            if (!updateSubscriptionResponse.ok) {
-                setMsg(`Error: ${updateSubscriptionResponse.status} ${updateSubscriptionResponse.statusText}`);
-                setOpenSnackbar(true);
-                setSeverity('error');
-            }
-
-            setMsg('Subscription paused successfully!!');
-            setOpenSnackbar(true);
-            setSeverity('success');
 
         } catch (error) {
             console.error('Error in API calls:', error);
@@ -213,37 +217,35 @@ const page = () => {
                 }),
             });
 
-            
+
             const data = await response.json();
             if (!response.ok) {
                 setMsg(`Error: ${response.status} ${response.statusText}`);
                 setOpenSnackbar(true);
                 setSeverity('error');
+            } else {
+                const updateSubscriptionResponse = await fetch('/api/updateSubscription', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        subscriptionId: subsId,
+                        isSubscribed: true
+                    }),
+                });
+
+                if (!updateSubscriptionResponse.ok) {
+                    setMsg(`Error: ${updateSubscriptionResponse.status} ${updateSubscriptionResponse.statusText}`);
+                    setOpenSnackbar(true);
+                    setSeverity('error');
+                } else {
+                    console.log('Subscription updated successfully.', data);
+                    setMsg('Subscription resumed successfully!!');
+                    setOpenSnackbar(true);
+                    setSeverity('success');
+                }
             }
-            console.log('Subscription resumed successfully.', data);
-
-            // Now make the second API call to /api/updateSubscription
-            const updateSubscriptionResponse = await fetch('/api/updateSubscription', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    subscriptionId: subsId,
-                    isSubscribed: true
-                }),
-            });
-
-            if (!updateSubscriptionResponse.ok) {
-                setMsg(`Error: ${updateSubscriptionResponse.status} ${updateSubscriptionResponse.statusText}`);
-                setOpenSnackbar(true);
-                setSeverity('error');
-            }
-
-            console.log('Subscription updated successfully.');
-            setMsg('Subscription resumed successfully!!');
-            setOpenSnackbar(true);
-            setSeverity('success');
 
         } catch (error) {
             console.error('Error in API calls:', error);
