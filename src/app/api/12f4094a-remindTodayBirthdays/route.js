@@ -43,6 +43,8 @@ const sendMessage = async (phoneNumber, message) => {
 
         const responseData = await response.json();
 
+        
+
         if (!response.ok) {
             console.error('Failed to send message:', responseData);
             return new Response(JSON.stringify({ success: false, message: 'Failed to send OTP message' }), {

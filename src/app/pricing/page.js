@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
-import { Button, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import { Alert, Button, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Snackbar, Typography } from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { initializePaddle } from "@paddle/paddle-js";
@@ -16,10 +16,10 @@ const btn = {
     fontFamily: 'Rubik',
     backgroundColor: "#1976d2",
     height: "40px",
-    width: "100%",
+    width: "fit-content",
     textTransform: 'none',
     borderRadius: '25px',
-    margin: '1.2rem 0 0 2rem',
+    margin: '1.2rem 2rem',
     float: 'right',
     "&:hover": {
         backgroundColor: "#915831",
@@ -48,7 +48,14 @@ const pro_plan = [
 const page = () => {
     const [paddle, setPaddle] = useState();
     const [custId, setCustId] = useState('');
+    const [subsId, setSubsId] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [paused, setPaused] = useState(false)
+
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [msg, setMsg] = useState('');
+    const [severity, setSeverity] = useState('');
+    const handleCloseSnackbar = () => setOpenSnackbar(false);
 
     const getCustomerId = useCallback(async () => {
         const apiUrl = `/api/customerId?phoneNumber=${phoneNumber}`;
@@ -58,6 +65,18 @@ const page = () => {
         if (response.ok) {
             const data = await response.json();
             setCustId(data.customerId);
+        } else {
+            console.error('Error fetching customer ID:', response.statusText);
+        }
+    });
+    const getSubsId = useCallback(async () => {
+        const apiUrl = `/api/subsId?phoneNumber=${phoneNumber}`;
+
+        const response = await fetch(apiUrl);
+
+        if (response.ok) {
+            const data = await response.json();
+            setSubsId(data.subsId);
         } else {
             console.error('Error fetching customer ID:', response.statusText);
         }
@@ -74,7 +93,8 @@ const page = () => {
 
         const userCookie = getCookie('user');
         getCustomerId();
-    }, [phoneNumber, getCustomerId]);
+        getSubsId();
+    }, [phoneNumber, getCustomerId, getSubsId]);
 
     useEffect(() => {
         void initializePaddle({
@@ -117,11 +137,120 @@ const page = () => {
             });
         }
     };
-    const openCheckoutPaused = () => {
+
+    const openCheckoutPaused = async () => {
         console.log("paused clicked");
+        setPaused(!paused);
+        console.log(subsId);
+        console.log(custId);
+
+        try {
+            // Call your backend API route instead of Paddle's API
+            const response = await fetch('/api/pauseSubscription', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    subsId
+                }),
+            });
+
+            
+            const data = await response.json();
+            if (!response.ok) {
+                setMsg(`Error: ${response.status} ${response.statusText}`);
+                setOpenSnackbar(true);
+                setSeverity('error');
+            }
+            console.log('Subscription paused successfully.', data);
+
+            // Now make the second API call to /api/updateSubscription
+            const updateSubscriptionResponse = await fetch('/api/updateSubscription', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    subscriptionId: subsId,
+                    isSubscribed: false
+                }),
+            });
+
+            if (!updateSubscriptionResponse.ok) {
+                setMsg(`Error: ${updateSubscriptionResponse.status} ${updateSubscriptionResponse.statusText}`);
+                setOpenSnackbar(true);
+                setSeverity('error');
+            }
+
+            setMsg('Subscription paused successfully!!');
+            setOpenSnackbar(true);
+            setSeverity('success');
+
+        } catch (error) {
+            console.error('Error in API calls:', error);
+            setMsg(`Errors in API calls: ${error}`);
+            setOpenSnackbar(true);
+            setSeverity('error');
+        }
     };
-    const openCheckoutResumed = () => {
-        console.log("resumed clicked");
+
+    const openCheckoutResumed = async () => {
+        console.log("resume clicked");
+        setPaused(!paused);
+        console.log(subsId);
+        console.log(custId);
+
+        try {
+            // Call your backend API route instead of Paddle's API
+            const response = await fetch('/api/resumeSubscription', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    subsId
+                }),
+            });
+
+            
+            const data = await response.json();
+            if (!response.ok) {
+                setMsg(`Error: ${response.status} ${response.statusText}`);
+                setOpenSnackbar(true);
+                setSeverity('error');
+            }
+            console.log('Subscription resumed successfully.', data);
+
+            // Now make the second API call to /api/updateSubscription
+            const updateSubscriptionResponse = await fetch('/api/updateSubscription', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    subscriptionId: subsId,
+                    isSubscribed: true
+                }),
+            });
+
+            if (!updateSubscriptionResponse.ok) {
+                setMsg(`Error: ${updateSubscriptionResponse.status} ${updateSubscriptionResponse.statusText}`);
+                setOpenSnackbar(true);
+                setSeverity('error');
+            }
+
+            console.log('Subscription updated successfully.');
+            setMsg('Subscription resumed successfully!!');
+            setOpenSnackbar(true);
+            setSeverity('success');
+
+        } catch (error) {
+            console.error('Error in API calls:', error);
+            setMsg(`Errors in API calls: ${error}`);
+            setOpenSnackbar(true);
+            setSeverity('error');
+        }
     };
     return (
         <div style={{ padding: '10% 2%' }}>
@@ -220,18 +349,23 @@ const page = () => {
                 </Grid>
             </Grid>
 
-            <Grid container spacing={2} sx={{
-                padding: '0 2% 0% 2%', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik', "@media (max-width:600px)": {
-                    padding: '4%'
-                },
+            <Grid container spacing={4} sx={{
+                margin: '3% 0',
+                justifyContent: 'center',
+                width: 'auto'
             }}>
-                <Grid md={8} sm={8} xs={12}>
+                <Grid md={4} sm={4} xs={12}>
                     <Button onClick={openCheckoutPaused} sx={btn}>Pause Subscription</Button>
                 </Grid>
                 <Grid md={4} sm={4} xs={12}>
                     <Button onClick={openCheckoutResumed} sx={btn}>Resume Subscription</Button>
                 </Grid>
             </Grid>
+            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+                <Alert onClose={handleCloseSnackbar} severity={severity} sx={{ width: '100%' }}>
+                    {msg}
+                </Alert>
+            </Snackbar>
 
 
         </div>
