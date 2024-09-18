@@ -22,7 +22,7 @@ const calculateDaysLeft = (day, month) => {
     return daysLeft;
 };
 
-const sendMessage = async (phoneNumber, message) => {
+/* const sendMessage = async (phoneNumber, message) => {
     const apiUrl = `${process.env.API_BASE_URL}/${process.env.VENDOR_UID}/contact/send-template-message?token=${process.env.TOKEN}`;
     const requestBody = {
         "from_phone_number_id": `${process.env.FROM_PHONE_NUMBER_ID}`,
@@ -65,7 +65,7 @@ const sendMessage = async (phoneNumber, message) => {
         });
     }
 };
-
+ */
 
 export async function GET(req) {
     try {
@@ -93,15 +93,17 @@ export async function GET(req) {
             return null;
         }).filter(entry => entry !== null);
 
-        for (const user of result) {
+        console.log("RESULT - ", result);
+
+        /* for (const user of result) {
             let { phoneNumber, birthdays } = user;
             phoneNumber = phoneNumber.replace("+", "");
             console.log(phoneNumber);
             const message = birthdays.map(b => `${b.name} - ${b.day} ${b.month}`).join(', ');
-            await sendMessage(phoneNumber, message);
-        }
+            // await sendMessage(phoneNumber, message);
+        } */
 
-        return new Response(JSON.stringify({ success: true, message: 'Messages sent successfully!' }), {
+        return new Response(JSON.stringify({ success: true, data: result, message: 'Messages sent successfully!' }), {
             status: 200,
         });
     } catch (error) {
