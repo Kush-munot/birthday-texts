@@ -77,8 +77,6 @@ export async function POST(req) {
             }
         }
 
-
-
         return new Response(JSON.stringify({ success: true, message: 'Birthdays stored successfully!' }), {
             status: 200,
         });

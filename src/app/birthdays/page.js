@@ -167,6 +167,12 @@ const Page = () => {
                 setOpenSnackbar(true);
                 setSeverity('success');
                 handleClose();
+
+                // Clear modal fields after successful submission
+                setName('');
+                setBirthdate('');
+                setBirthMonth('');
+
                 fetchBirthdays();
             } else {
                 setMsg('Failed to add birthday.');

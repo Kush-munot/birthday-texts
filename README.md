@@ -4,7 +4,7 @@ db.otps.find()
 db.birthdays.find()
 db.otps.deleteMany({})
 db.birthdays.deleteMany({})
-db.birthdays.deleteOne({"phoneNumber":"+917878918744"})
+db.birthdays.deleteOne({"phoneNumber":"+917878918711"})
 cloudflared tunnel --url http://localhost:3000
 
 

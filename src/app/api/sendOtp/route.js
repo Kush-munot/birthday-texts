@@ -36,12 +36,8 @@ export async function POST(req, res) {
         "button_0": otp
     };
 
-    return new Response(JSON.stringify({ success: true, message: `Thank you for registering on Birthdayremind. Your One-Time-Password is - ${otp}` }), {
-        status: 200,
-    });
-
     // Send OTP message via WhatsApp API
-    /* try {
+    try {
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
@@ -71,5 +67,5 @@ export async function POST(req, res) {
         return new Response(JSON.stringify({ success: false, message: 'Error sending OTP message' }), {
             status: 500,
         });
-    } */
+    }
 }

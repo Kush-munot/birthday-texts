@@ -16,11 +16,10 @@ const btn = {
     fontFamily: 'Rubik',
     backgroundColor: "#1976d2",
     height: "40px",
-    width: "fit-content",
+    width: "200px",
     textTransform: 'none',
     borderRadius: '25px',
-    margin: '1.2rem 2rem',
-    float: 'right',
+    margin: '2rem',
     "&:hover": {
         backgroundColor: "#915831",
         color: "white",
@@ -160,7 +159,7 @@ const page = () => {
             const data = await response.json();
             console.log(response.ok);
             if (!response.ok) {
-                setMsg(`Error: ${response.status} ${response.statusText}`);
+                setMsg(`Error: ${response.status}. Unable to Pause because the subscription is in trial period or already paused.`);
                 setOpenSnackbar(true);
                 setSeverity('error');
                 throw new Error(`Error: ${response.status} ${response.statusText}`)
@@ -180,7 +179,7 @@ const page = () => {
                 console.log(updateSubscriptionResponse.ok);
 
                 if (!updateSubscriptionResponse.ok) {
-                    setMsg(`Error: ${updateSubscriptionResponse.status} ${updateSubscriptionResponse.statusText}`);
+                    setMsg(`Error: ${updateSubscriptionResponse.status}. Unable to Pause because the subscription is in trial period or already paused.`);
                     setOpenSnackbar(true);
                     setSeverity('error');
                 } else {
@@ -193,7 +192,7 @@ const page = () => {
 
         } catch (error) {
             console.error('Error in API calls:', error);
-            setMsg(`Errors in API calls: ${error}`);
+            setMsg(`${error}- Unable to Pause because the subscription is in trial period or already paused.`);
             setOpenSnackbar(true);
             setSeverity('error');
         }
@@ -220,7 +219,7 @@ const page = () => {
 
             const data = await response.json();
             if (!response.ok) {
-                setMsg(`Error: ${response.status} ${response.statusText}`);
+                setMsg(`Error: ${response.status}- Unable to Resume because the subscription is in trial period or already resumed.`);
                 setOpenSnackbar(true);
                 setSeverity('error');
             } else {
@@ -236,7 +235,7 @@ const page = () => {
                 });
 
                 if (!updateSubscriptionResponse.ok) {
-                    setMsg(`Error: ${updateSubscriptionResponse.status} ${updateSubscriptionResponse.statusText}`);
+                    setMsg(`Error: ${updateSubscriptionResponse.status}- Unable to Pause because the subscription is in trial period or already paused.`);
                     setOpenSnackbar(true);
                     setSeverity('error');
                 } else {
@@ -249,7 +248,7 @@ const page = () => {
 
         } catch (error) {
             console.error('Error in API calls:', error);
-            setMsg(`Errors in API calls: ${error}`);
+            setMsg(`${error}. Unable to Resume because the subscription is in trial period or already resumed.`);
             setOpenSnackbar(true);
             setSeverity('error');
         }
@@ -351,9 +350,8 @@ const page = () => {
                 </Grid>
             </Grid>
 
-            <Grid container spacing={4} sx={{
+            <Grid container spacing={2} sx={{
                 margin: '3% 0',
-                justifyContent: 'center',
                 width: 'auto'
             }}>
                 <Grid md={4} sm={4} xs={12}>
@@ -361,6 +359,9 @@ const page = () => {
                 </Grid>
                 <Grid md={4} sm={4} xs={12}>
                     <Button onClick={openCheckoutResumed} sx={btn}>Resume Subscription</Button>
+                </Grid>
+                <Grid md={4} sm={4} xs={12}>
+                    <Button href='/birthdays' sx={btn}>Dashboard</Button>
                 </Grid>
             </Grid>
             <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
