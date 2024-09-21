@@ -38,7 +38,7 @@ const Signup = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const isValid = await validatePhoneNumber();
-        console.log(phoneNumber);
+        //console.log(phoneNumber);
         if (!isValid) {
             setMsg('Invalid phone number. Please check if you are entering proper Country Codes.');
             setSeverity('error')
@@ -87,7 +87,7 @@ const Signup = () => {
             });
 
             const data = await response.json();
-            console.log(data);
+            //console.log(data);
 
             if (data.success) {
                 setMsg('OTP Verified successfully!');

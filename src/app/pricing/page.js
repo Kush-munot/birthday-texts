@@ -85,7 +85,7 @@ const page = () => {
         const getCookie = (name) => {
             const value = `${document.cookie}`;
             const parts = value.split(`${name}=`);
-            console.log(parts[1]);
+            //console.log(parts[1]);
             setPhoneNumber(parts[1]);
             if (parts.length === 2) return parts.pop().split(';').shift();
         };
@@ -138,10 +138,10 @@ const page = () => {
     };
 
     const openCheckoutPaused = async () => {
-        console.log("paused clicked");
+        //console.log("paused clicked");
         setPaused(!paused);
-        console.log(subsId);
-        console.log(custId);
+        //console.log(subsId);
+        //console.log(custId);
 
         try {
             // Call your backend API route instead of Paddle's API
@@ -157,7 +157,7 @@ const page = () => {
 
 
             const data = await response.json();
-            console.log(response.ok);
+            //console.log(response.ok);
             if (!response.ok) {
                 setMsg(`Error: ${response.status}. Unable to Pause because the subscription is in trial period or already paused.`);
                 setOpenSnackbar(true);
@@ -176,7 +176,7 @@ const page = () => {
                     }),
                 });
 
-                console.log(updateSubscriptionResponse.ok);
+                //console.log(updateSubscriptionResponse.ok);
 
                 if (!updateSubscriptionResponse.ok) {
                     setMsg(`Error: ${updateSubscriptionResponse.status}. Unable to Pause because the subscription is in trial period or already paused.`);
@@ -199,10 +199,10 @@ const page = () => {
     };
 
     const openCheckoutResumed = async () => {
-        console.log("resume clicked");
+        //console.log("resume clicked");
         setPaused(!paused);
-        console.log(subsId);
-        console.log(custId);
+        //console.log(subsId);
+        //console.log(custId);
 
         try {
             // Call your backend API route instead of Paddle's API
@@ -239,7 +239,7 @@ const page = () => {
                     setOpenSnackbar(true);
                     setSeverity('error');
                 } else {
-                    console.log('Subscription updated successfully.', data);
+                    //console.log('Subscription updated successfully.', data);
                     setMsg('Subscription resumed successfully!!');
                     setOpenSnackbar(true);
                     setSeverity('success');

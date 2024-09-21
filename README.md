@@ -1,5 +1,5 @@
 docker exec -it mongo mongosh -u root -p example --authenticationDatabase admin
-use nextjs-mongo
+use nextjs_mongo
 db.otps.find()
 db.birthdays.find()
 db.otps.deleteMany({})

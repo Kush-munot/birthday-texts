@@ -52,8 +52,8 @@ const calculateDaysLeft = (day, month) => {
             });
         }
 
-        console.log(`Reminder Message sent to ${phoneNumber}: ${message}`);
-        console.log('WhatsApp API response:', responseData);
+        //console.log(`Reminder Message sent to ${phoneNumber}: ${message}`);
+        //console.log('WhatsApp API response:', responseData);
 
         return new Response(JSON.stringify({ success: true, message: `Reminder Message Sent` }), {
             status: 200,
@@ -70,7 +70,7 @@ const calculateDaysLeft = (day, month) => {
 export async function GET(req) {
     try {
         const client = await clientPromise;
-        const db = client.db('nextjs-mongo');
+        const db = client.db('nextjs_mongo');
         const collection = db.collection('birthdays');
 
         const allBirthdays = await collection.find({}).toArray();
@@ -93,12 +93,12 @@ export async function GET(req) {
             return null;
         }).filter(entry => entry !== null);
 
-        console.log("RESULT - ", result);
+        //console.log("RESULT - ", result);
 
         /* for (const user of result) {
             let { phoneNumber, birthdays } = user;
             phoneNumber = phoneNumber.replace("+", "");
-            console.log(phoneNumber);
+            //console.log(phoneNumber);
             const message = birthdays.map(b => `${b.name} - ${b.day} ${b.month}`).join(', ');
             // await sendMessage(phoneNumber, message);
         } */

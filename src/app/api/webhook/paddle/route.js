@@ -8,8 +8,8 @@ export async function POST(request) {
     try {
         const body = await request.text();
         const signature = request.headers.get('paddle-signature');
-        // console.log("REQ", body);
-        // console.log("REQ-H", request.headers.get('paddle-signature'));
+        // //console.log("REQ", body);
+        // //console.log("REQ-H", request.headers.get('paddle-signature'));
 
         const eventData = paddle.webhooks.unmarshal(
             body,
@@ -23,22 +23,22 @@ export async function POST(request) {
 
 
         let client = await clientPromise;
-        let db = client.db('nextjs-mongo');
+        let db = client.db('nextjs_mongo');
         let collection = db.collection('birthdays');
         let customerId;
         let subsId;
         switch (eventData.eventType) {
             case EventName.SubscriptionCreated:
-                customerId = eventData.data.customerId; 
-                subsId = eventData.data.id; 
-                console.log("SUBS_ID", subsId);
-                console.log("CUST_ID", customerId);
+                customerId = eventData.data.customerId;
+                subsId = eventData.data.id;
+                //console.log("SUBS_ID", subsId);
+                //console.log("CUST_ID", customerId);
                 const updatez = await collection.updateOne(
                     { customerId },
                     { $set: { isSubscribed: true, subscriptionId: subsId } }
                 );
-                console.log("UPDATE", updatez);
-                console.log("Event Data - ", eventData.data);
+                //console.log("UPDATE", updatez);
+                //console.log("Event Data - ", eventData.data);
                 break;
             default:
                 return NextResponse.json({ message: 'Event not handled' }, { status: 200 });

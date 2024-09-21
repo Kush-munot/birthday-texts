@@ -74,9 +74,9 @@ export default async function handler(req, res) {
                     { $set: { isSubscribed: true} }
                 );*/
 
-                console.log(eventData.data);
+                //console.log(eventData.data);
 
-                break; 
+                break;
             default:
                 return res.status(200).json({ message: 'Event not handled' });
         }

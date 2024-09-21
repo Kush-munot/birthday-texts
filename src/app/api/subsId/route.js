@@ -5,7 +5,7 @@ export async function GET(req) {
         // Parse the URL for the phone number
         const url = new URL(req.url);
         let phoneNumber = url.searchParams.get('phoneNumber');
-        console.log(phoneNumber);
+        //console.log(phoneNumber);
 
         if (!phoneNumber) {
             return new Response(JSON.stringify({ success: false, message: 'Phone number is required' }), {
@@ -15,13 +15,13 @@ export async function GET(req) {
         phoneNumber = "+" + phoneNumber;
 
         const client = await clientPromise;
-        const db = client.db('nextjs-mongo');
+        const db = client.db('nextjs_mongo');
         const collection = db.collection('birthdays');
 
         // Search for a document where the phone number matches
         const user = await collection.findOne({ phoneNumber });
 
-        console.log(user);
+        //console.log(user);
 
         if (!user) {
             return new Response(JSON.stringify({ success: false, message: 'User not found' }), {

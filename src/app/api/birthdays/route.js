@@ -10,7 +10,7 @@ const calculateDaysLeft = (day, month) => {
     const year = new Date().getFullYear();
     let birthday = new Date(year, monthIndex, day);
 
-    console.log(new Date(year, monthIndex, day));
+    //console.log(new Date(year, monthIndex, day));
 
     const today = new Date();
 
@@ -35,7 +35,7 @@ export async function POST(req) {
         }
 
         const client = await clientPromise;
-        const db = client.db('nextjs-mongo');
+        const db = client.db('nextjs_mongo');
         const collection = db.collection('birthdays');
 
         // Find the user's existing birthdays
@@ -48,7 +48,7 @@ export async function POST(req) {
             existingBirthdays = user.birthdays;
         }
 
-        console.log("Existing Birthdays", existingBirthdays);
+        //console.log("Existing Birthdays", existingBirthdays);
 
         // Filter out any duplicates (based on name, date, and month)
         const newBirthdays = birthdays.filter(newBday =>
@@ -58,7 +58,7 @@ export async function POST(req) {
                 existingBday.month === newBday.month
             )
         );
-        console.log("new Birthdays - ", newBirthdays);
+        //console.log("new Birthdays - ", newBirthdays);
 
         // Append the filtered birthdays (only new ones)
         if (newBirthdays.length > 0) {
@@ -94,14 +94,14 @@ export async function GET(req) {
         let phoneNumber = url.searchParams.get('phoneNumber');
 
         const client = await clientPromise;
-        const db = client.db('nextjs-mongo');
+        const db = client.db('nextjs_mongo');
         const collection = db.collection('birthdays');
 
         if (phoneNumber) {
             phoneNumber = "+" + phoneNumber
 
             const userBirthdays = await collection.findOne({ phoneNumber });
-            console.log(userBirthdays);
+            //console.log(userBirthdays);
 
             if (!userBirthdays) {
                 return new Response(JSON.stringify({ success: false, message: 'No birthdays found for this user' }), {
@@ -115,7 +115,7 @@ export async function GET(req) {
         } else {
             // Return all data if no phoneNumber is specified
             const allBirthdays = await collection.find({}).toArray();
-            // console.log(allBirthdays);
+            // //console.log(allBirthdays);
 
             const result = allBirthdays.map(user => {
                 const upcomingBirthdays = user.birthdays
@@ -126,7 +126,7 @@ export async function GET(req) {
                         month: birthday.month
                     }));
 
-                console.log(upcomingBirthdays);
+                //console.log(upcomingBirthdays);
 
                 if (upcomingBirthdays.length > 0) {
                     return {

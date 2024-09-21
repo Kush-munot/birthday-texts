@@ -17,13 +17,13 @@ export async function POST(req, res) {
 
     // Connect to MongoDB
     const client = await clientPromise;
-    const db = client.db('nextjs-mongo');
+    const db = client.db('nextjs_mongo');
 
     // Insert the phone number and OTP into the database
     const collection = db.collection('otps');
     await collection.insertOne({ phoneNumber, otp, createdAt: new Date() });
 
-    console.log(otp);
+    //console.log(otp);
 
     // API URL and body
     const apiUrl = `${process.env.API_BASE_URL}/${process.env.VENDOR_UID}/contact/send-template-message?token=${process.env.TOKEN}`;
@@ -56,8 +56,8 @@ export async function POST(req, res) {
             });
         }
 
-        console.log(`OTP sent to ${phoneNumber}: ${otp}`);
-        console.log('WhatsApp API response:', responseData);
+        //console.log(`OTP sent to ${phoneNumber}: ${otp}`);
+        //console.log('WhatsApp API response:', responseData);
 
         return new Response(JSON.stringify({ success: true, message: `Thank you for registering on Birthdayremind. Your One-Time-Password is - ${otp}` }), {
             status: 200,

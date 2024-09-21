@@ -8,7 +8,7 @@ export async function POST(req, res) {
 
     try {
         const { subscriptionId, isSubscribed } = await req.json();
-        console.log(subscriptionId, isSubscribed);
+        //console.log(subscriptionId, isSubscribed);
 
         // Validate the input
         if (!subscriptionId) {
@@ -19,7 +19,7 @@ export async function POST(req, res) {
 
         // Connect to the database
         const client = await clientPromise;
-        const db = client.db('nextjs-mongo');
+        const db = client.db('nextjs_mongo');
         const collection = db.collection('birthdays'); // Modify with your actual collection name
 
         // Update the subscription status

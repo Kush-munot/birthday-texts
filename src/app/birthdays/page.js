@@ -114,7 +114,7 @@ const Page = () => {
 
             const data = await response.json();
 
-            console.log("Data.isSubs", data);
+            //console.log("Data.isSubs", data);
 
             if (data.isSubscribed) {
                 setIsSubscribed(true);
@@ -150,7 +150,7 @@ const Page = () => {
             birthdays: [newBirthday]
         };
 
-        console.log(birthdayData);
+        //console.log(birthdayData);
 
         try {
             const response = await fetch('/api/birthdays', {
@@ -195,7 +195,7 @@ const Page = () => {
         const getCookie = (name) => {
             const value = `${document.cookie}`;
             const parts = value.split(`${name}=`);
-            console.log(parts[1]);
+            //console.log(parts[1]);
             setPhoneNumber(parts[1]);
             if (parts.length === 2) return parts.pop().split(';').shift();
         };

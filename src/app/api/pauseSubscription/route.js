@@ -3,9 +3,9 @@ export async function POST(req) {
     try {
         const { subsId } = await req.json();
 
-        console.log("SUBS_ID", subsId);
+        //console.log("SUBS_ID", subsId);
         const paddleApiUrl = `https://sandbox-api.paddle.com/subscriptions/${subsId}/pause`;
-        console.log("API_URL", paddleApiUrl);
+        //console.log("API_URL", paddleApiUrl);
         const response = await fetch(paddleApiUrl, {
             method: 'POST',
             headers: {
@@ -17,7 +17,7 @@ export async function POST(req) {
             }),
         });
 
-        console.log(response);
+        //console.log(response);
 
         if (!response.ok) {
             throw new Error(`Error: ${response.status} ${response.statusText}`);

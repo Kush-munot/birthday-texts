@@ -7,7 +7,7 @@ export async function POST(req) {
         let { phoneNumber, otp } = await req.json();
         phoneNumber = phoneNumber.replace("+", "");
 
-        console.log(phoneNumber, otp);
+        //console.log(phoneNumber, otp);
 
         if (!phoneNumber || !otp) {
             return new Response(JSON.stringify({ message: 'Phone number and OTP are required' }), {
@@ -16,7 +16,7 @@ export async function POST(req) {
         }
 
         const client = await clientPromise;
-        const db = client.db('nextjs-mongo');
+        const db = client.db('nextjs_mongo');
 
         const collection = db.collection('otps');
         const bday_collection = db.collection('birthdays');
@@ -32,7 +32,7 @@ export async function POST(req) {
 
         // Optionally, remove the OTP after verification
         await collection.deleteOne({ phoneNumber, otp });
-        
+
         const paddle = new Paddle(process.env.PADDLE_API_KEY, { environment: Environment.sandbox, logLevel: LogLevel.verbose })
         const existingCustomers = await paddle.customers.list({ email: [`${phoneNumber}@gmail.com`] }).next()
         let customerId;
@@ -43,7 +43,7 @@ export async function POST(req) {
             customerId = existingCustomers[0].id;
         }
         const cookie = `user=${phoneNumber}; Max-Age=${60 * 60 * 24}; Path=/; SameSite=Lax;`;
-        console.log(customerId);
+        //console.log(customerId);
 
         await bday_collection.insertOne({
             phoneNumber: `+${phoneNumber}`,
@@ -52,7 +52,7 @@ export async function POST(req) {
             birthdays: []
         });
 
-        
+
         return new Response(JSON.stringify({ success: true, message: 'OTP verified successfully!', key: phoneNumber }), {
             status: 200,
             headers: {
