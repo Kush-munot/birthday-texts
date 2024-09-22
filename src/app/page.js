@@ -1,10 +1,10 @@
 "use client";
 import { Box, Button, ButtonGroup, Stack, Typography } from "@mui/material";
 import styles from "./page.module.css";
-import { data01, data02, data03 } from "./utils/sliderData";
 import Signup from "../components/Signup";
 import { useEffect, useState } from "react";
 import Pricing from "../components/Pricing";
+import InfiniteScrollBirthdays from "@/components/InfiniteScrollBirthdays";
 
 
 const btn = {
@@ -46,41 +46,8 @@ export default function Home() {
               <p>Bye-bye, Facebook, LinkedIn. Get WhatsApp reminders for birthdays, for free.</p>
             </Box>
           </div >
-          <div key={key}>
-            <marquee behavior="scroll" direction="left" scrollamount="3" loop="-1">
-              <Stack direction="row" sx={{ justifyContent: 'right' }}>
-                {
-                  data01.map((data, index) => (
-                    <ButtonGroup key={index} sx={{ margin: '10px' }}>
-                      <Button sx={{ backgroundColor: '#1976d2', color: '#fff', borderRadius: '25px', }}>{data.BirthDate}</Button>
-                      <Button sx={{ backgroundColor: '#fff', color: '#1976d2', borderRadius: '25px', }}>{data.Name}</Button>
-                    </ButtonGroup>
-                  ))
-                }
-              </Stack>
-            </marquee>
-            <marquee behavior="scroll" direction="left" scrollamount="3">
-              <Stack direction="row" sx={{ justifyContent: 'right' }}>
-                {data02.map((data, index) => (
-                  <ButtonGroup key={index} sx={{ margin: '10px' }}>
-                    <Button sx={{ backgroundColor: '#1976d2', color: '#fff', borderRadius: '25px', }}>{data.BirthDate}</Button>
-                    <Button sx={{ backgroundColor: '#fff', color: '#1976d2', borderRadius: '25px', }}>{data.Name}</Button>
-                  </ButtonGroup>
-                ))}
-              </Stack>
-            </marquee>
-            <marquee behavior="scroll" direction="left" scrollamount="3">
-              <Stack direction="row" sx={{ justifyContent: 'right' }}>
-                {
-                  data03.map((data, index) => (
-                    <ButtonGroup key={index} sx={{ margin: '10px' }}>
-                      <Button sx={{ backgroundColor: '#1976d2', color: '#fff', borderRadius: '25px', }}>{data.BirthDate}</Button>
-                      <Button sx={{ backgroundColor: '#fff', color: '#1976d2', borderRadius: '25px', }}>{data.Name}</Button>
-                    </ButtonGroup>
-                  ))
-                }
-              </Stack>
-            </marquee>
+          <div>
+            <InfiniteScrollBirthdays/>
           </div>
           <Box sx={{ padding: '1rem 0', display: 'grid', justifyContent: 'center' }}>
             <Signup />
