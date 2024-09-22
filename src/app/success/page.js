@@ -1,16 +1,16 @@
 "use client";
+
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Grid, Typography, Container } from '@mui/material';
 
-
-const page = () => {
+const SuccessPage = () => {
     const router = useRouter();
 
     useEffect(() => {
         const timer = setTimeout(() => {
             router.push('/birthdays');
-        }, 5000);
+        }, 3000);
 
         return () => clearTimeout(timer); // Cleanup timer if the component unmounts
     }, [router]);
@@ -39,4 +39,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default SuccessPage;
