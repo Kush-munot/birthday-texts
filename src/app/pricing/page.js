@@ -113,7 +113,7 @@ const page = () => {
                     { priceId: process.env.NEXT_PUBLIC_PADDLE_M_PRICE_ID, quantity: 1 },
                 ],
                 settings: {
-                    successUrl: `${process.env.NEXT_PUBLIC_LINK}/birthdays`,
+                    successUrl: `${process.env.NEXT_PUBLIC_LINK}/success`,
                 },
                 customer: {
                     id: custId,
@@ -128,7 +128,7 @@ const page = () => {
                     { priceId: process.env.NEXT_PUBLIC_PADDLE_Y_PRICE_ID, quantity: 1 },
                 ],
                 settings: {
-                    successUrl: `${process.env.NEXT_PUBLIC_LINK}/birthdays`,
+                    successUrl: `${process.env.NEXT_PUBLIC_LINK}/success`,
                 },
                 customer: {
                     id: custId,

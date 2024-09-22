@@ -1,0 +1,8 @@
+.custom-phone-input input {
+    height: 30px;
+    margin: 0 10px 10px 0;
+}
+
+.custom-phone-input .PhoneInputCountry {
+    margin-right: 10px;
+}

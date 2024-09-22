@@ -45,12 +45,17 @@ export async function POST(req) {
         const cookie = `user=${phoneNumber}; Max-Age=${60 * 60 * 24}; Path=/; SameSite=Lax;`;
         //console.log(customerId);
 
-        await bday_collection.insertOne({
-            phoneNumber: `+${phoneNumber}`,
-            isSubscribed: false,
-            customerId: customerId,
-            birthdays: []
-        });
+        await bday_collection.updateOne(
+            { phoneNumber: `+${phoneNumber}` },
+            {
+                $setOnInsert: {
+                    isSubscribed: false,
+                    customerId: customerId,
+                    birthdays: []
+                }
+            },
+            { upsert: true }
+        );
 
 
         return new Response(JSON.stringify({ success: true, message: 'OTP verified successfully!', key: phoneNumber }), {

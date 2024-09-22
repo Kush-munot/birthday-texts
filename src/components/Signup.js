@@ -1,8 +1,16 @@
+import "react-phone-number-input/style.css";
 import React, { useEffect, useState } from 'react';
 import { Box, TextField, Button, Snackbar, Alert } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { isValidNumber, parsePhoneNumberFromString } from 'libphonenumber-js';
 import Image from 'next/image';
+import PhoneInputWithCountrySelect, {
+    isPossiblePhoneNumber,
+    parsePhoneNumber,
+} from "react-phone-number-input";
+import styles from "./signup.css"
+
+
 
 
 const Signup = () => {
@@ -46,6 +54,7 @@ const Signup = () => {
             return;
         } else {
             try {
+                console.log(phoneNumber);
                 const response = await fetch('/api/sendOtp', {
                     method: 'POST',
                     headers: {
@@ -116,18 +125,29 @@ const Signup = () => {
             <Box sx={{ width: '300px', margin: '4% auto', padding: '2px 20px 20px 20px', textAlign: 'center', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik' }}>
                 <form onSubmit={handleSubmit}>
                     <p>Sign in or sign up for your free account:</p>
-                    <TextField
+                    {/* <TextField
                         label="Enter Phone Number"
                         variant="outlined"
                         fullWidth
                         margin="normal"
                         value={phoneNumber}
                         onChange={handlePhoneNumberChange}
-                        sx={{ margin: '0 10px 10px 0' }}
+                        sx={{ display: 'none' }}
+                    /> */}
+                    <PhoneInputWithCountrySelect
+                        placeholder="Enter Phone Number"
+                        value={phoneNumber}
+                        onChange={setPhoneNumber}
+                        addInternationalOption={false}
+                        defaultCountry="IN"
+                        className="custom-phone-input"
                     />
-                    <Button variant="contained" color="primary" type="submit" fullWidth>
+                    <Button disabled = {!isPossiblePhoneNumber(phoneNumber ?? "")} variant="contained" color="primary" type="submit" fullWidth>
                         Send OTP
                     </Button>
+                    {/* <Button variant="contained" color="primary" type="submit" fullWidth>
+                        Send OTP
+                    </Button> */}
                 </form>
 
                 {smsSent && (

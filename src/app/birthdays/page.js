@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react'
 import { differenceInCalendarDays, addYears, format } from 'date-fns';
 import { initializePaddle } from "@paddle/paddle-js";
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+
+const filter = createFilterOptions();
 
 
 const btn = {
@@ -67,8 +70,12 @@ const month = [
 ];
 const day = Array.from({ length: 31 }, (_, i) => i + 1);
 
-const calculateWeeksLeft = (day, monthh) => {
-    const monthIndex = month.indexOf(monthh);
+const calculateDaysLeft = (day, month) => {
+    const monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    const monthIndex = monthNames.indexOf(month);
     const year = new Date().getFullYear();
     let birthday = new Date(year, monthIndex, day);
 
@@ -77,10 +84,10 @@ const calculateWeeksLeft = (day, monthh) => {
     if (birthday < today) {
         birthday = addYears(birthday, 1);
     }
-    const daysLeft = differenceInCalendarDays(birthday, today);
-    const weeksLeft = Math.ceil(daysLeft / 7);
 
-    return weeksLeft;
+    const daysLeft = differenceInCalendarDays(birthday, today);
+
+    return daysLeft;
 };
 
 
@@ -91,6 +98,7 @@ const Page = () => {
     const [birthDate, setBirthdate] = useState();
     const [birthMonth, setBirthMonth] = useState();
     const [name, setName] = useState();
+    const [relation, setRelation] = useState();
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [msg, setMsg] = useState('');
     const [severity, setSeverity] = useState('');
@@ -143,6 +151,7 @@ const Page = () => {
             name: name,
             date: birthDate,
             month: birthMonth,
+            relationship: relation.title
         };
 
         const birthdayData = {
@@ -224,13 +233,13 @@ const Page = () => {
                             <h2>Upcoming Birthdays 📆</h2>
                         </Grid>
                         <Grid md={4} sm={4} xs={12}>
-                            {/* <Button onClick={handleOpen} sx={btn}>+ Add Birthday</Button> */}
-                            {
+                            <Button onClick={handleOpen} sx={btn}>+ Add Birthday</Button>
+                            {/* {
                                 isSubscribed ?
                                     <Button onClick={handleOpen} sx={btn}>+ Add Birthday</Button>
                                     :
                                     <Button onClick={openCheckout} sx={btn}>Subscribe</Button>
-                            }
+                            } */}
                         </Grid>
                     </Grid>
                     {birthdayData.map((birthday, index) => (
@@ -261,7 +270,7 @@ const Page = () => {
                                         display: 'none'
                                     },
                                 }}>
-                                    {calculateWeeksLeft(birthday.date, birthday.month)} Weeks to go..
+                                    {calculateDaysLeft(birthday.date, birthday.month)} Days to go..
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -312,6 +321,69 @@ const Page = () => {
                             ))}
                         </Select>
                     </FormControl>
+
+                    <Autocomplete
+                        fullWidth
+                        value={relation}
+                        onChange={(event, newValue) => {
+                            if (typeof newValue === 'string') {
+                                setRelation({
+                                    title: newValue,
+                                });
+                            } else if (newValue && newValue.inputValue) {
+                                // Create a new value from the user input
+                                setRelation({
+                                    title: newValue.inputValue,
+                                });
+                            } else {
+                                setRelation(newValue);
+                            }
+                        }}
+                        filterOptions={(options, params) => {
+                            const filtered = filter(options, params);
+
+                            const { inputValue } = params;
+                            // Suggest the creation of a new value
+                            const isExisting = options.some((option) => inputValue === option.title);
+                            if (inputValue !== '' && !isExisting) {
+                                filtered.push({
+                                    inputValue,
+                                    title: `Add "${inputValue}"`,
+                                });
+                            }
+
+                            return filtered;
+                        }}
+                        selectOnFocus
+                        clearOnBlur
+                        handleHomeEndKeys
+                        id="free-solo-with-text-demo"
+                        options={relationshipValues}
+                        getOptionLabel={(option) => {
+                            // Value selected with enter, right from the input
+                            if (typeof option === 'string') {
+                                return option;
+                            }
+                            // Add "xxx" option created dynamically
+                            if (option.inputValue) {
+                                return option.inputValue;
+                            }
+                            // Regular option
+                            return option.title;
+                        }}
+                        renderOption={(props, option) => {
+                            const { key, ...optionProps } = props;
+                            return (
+                                <li key={key} {...optionProps}>
+                                    {option.title}
+                                </li>
+                            );
+                        }}
+                        freeSolo
+                        renderInput={(params) => (
+                            <TextField {...params} label="Relation" />
+                        )}
+                    />
                     <Button onClick={handleSubmit} sx={mbtn}>Submit</Button>
                 </Box>
             </Modal>
@@ -323,5 +395,28 @@ const Page = () => {
         </>
     )
 }
+
+const relationshipValues = [
+    { title: 'Father' },
+    { title: 'Mother' },
+    { title: 'Son' },
+    { title: 'Daughter' },
+    { title: 'Brother' },
+    { title: 'Sister' },
+    { title: 'Husband' },
+    { title: 'Wife' },
+    { title: 'Uncle' },
+    { title: 'Aunt' },
+    { title: 'Nephew' },
+    { title: 'Niece' },
+    { title: 'Grandfather' },
+    { title: 'Grandmother' },
+    { title: 'Grandson' },
+    { title: 'Granddaughter' },
+    { title: 'Cousin' },
+    { title: 'Friend' },
+    { title: 'Partner' }
+];
+
 
 export default Page
