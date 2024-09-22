@@ -161,6 +161,10 @@ const Page = () => {
         }
     };
 
+    const openCheckout = () => {
+        router.push('/pricing')
+    }
+
     const fetchBirthdays = useCallback(async () => {
         try {
             const response = await fetch(`/api/birthdays?phoneNumber=${phoneNumber}`, {
@@ -290,13 +294,12 @@ const Page = () => {
                             <h2>Upcoming Birthdays 📆</h2>
                         </Grid>
                         <Grid md={4} sm={4} xs={12}>
-                            <Button onClick={handleOpen} sx={btn}>+ Add Birthday</Button>
-                            {/* {
+                            {
                                 isSubscribed ?
                                     <Button onClick={handleOpen} sx={btn}>+ Add Birthday</Button>
                                     :
                                     <Button onClick={openCheckout} sx={btn}>Subscribe</Button>
-                            } */}
+                            }
                         </Grid>
                     </Grid>
                     {birthdayData.map((birthday, index) => (
@@ -345,7 +348,7 @@ const Page = () => {
                 </div>
             ) : (
                 <div style={{ paddingTop: '4rem' }}>
-                    <h1>Redirecting...</h1>
+                    <h1>Loading...</h1>
                 </div>
             )}
             <Modal
