@@ -6,6 +6,9 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { differenceInCalendarDays, addYears, format } from 'date-fns';
 import { initializePaddle } from "@paddle/paddle-js";
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { v4 as uuidv4 } from 'uuid';
 
 const filter = createFilterOptions();
 
@@ -104,6 +107,7 @@ const Page = () => {
     const [severity, setSeverity] = useState('');
     const [isSubscribed, setIsSubscribed] = useState(false);
     const [birthdayData, setBirthdayData] = useState([]);
+    const [editingBirthday, setEditingBirthday] = useState(null);
 
 
     const [open, setOpen] = React.useState(false);
@@ -113,6 +117,49 @@ const Page = () => {
     const handleBirthDate = (event) => setBirthdate(event.target.value);
     const handleBirthMonth = (event) => setBirthMonth(event.target.value);
     const handleName = (event) => setName(event.target.value);
+    const handleEdit = (birthday) => {
+        console.log(birthday);
+        setEditingBirthday(birthday);
+        setName(birthday.name);
+        setBirthdate(birthday.date);
+        setBirthMonth(birthday.month);
+        setRelation({ title: birthday.relationship });
+        handleOpen();
+    };
+    const handleDelete = async (birthday) => {
+        try {
+            const response = await fetch('/api/birthdays', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    phoneNumber,
+                    birthdayId: birthday.id, // Use the UUID of the birthday to delete
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setMsg('Deleted Birthday Successfully !!');
+                setOpenSnackbar(true);
+                setSeverity('success');
+                fetchBirthdays();
+            } else {
+                setMsg('An error occurred in deleting birthday. Please try again.');
+                setOpenSnackbar(true);
+                setSeverity('error');
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error('Error deleting birthday:', error);
+            setMsg('An error occurred in deleting birthday. Please try again.');
+            setOpenSnackbar(true);
+            setSeverity('error');
+            alert('An error occurred while deleting the birthday');
+        }
+    };
 
     const fetchBirthdays = useCallback(async () => {
         try {
@@ -147,7 +194,19 @@ const Page = () => {
             return;
         }
 
-        const newBirthday = {
+        const updatedBirthday = {
+            id: editingBirthday ? editingBirthday.id : uuidv4(),
+            name: name,
+            date: birthDate,
+            month: birthMonth,
+            relationship: relation.title
+        };
+        const birthdayData = {
+            phoneNumber: phoneNumber,
+            birthdays: [updatedBirthday]
+        };
+
+        /* const newBirthday = {
             name: name,
             date: birthDate,
             month: birthMonth,
@@ -157,13 +216,13 @@ const Page = () => {
         const birthdayData = {
             phoneNumber: phoneNumber,
             birthdays: [newBirthday]
-        };
+        }; */
 
-        //console.log(birthdayData);
+        console.log(birthdayData);
 
         try {
             const response = await fetch('/api/birthdays', {
-                method: 'POST',
+                method: editingBirthday ? 'PUT' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -172,7 +231,7 @@ const Page = () => {
 
             const data = await response.json();
             if (data.success) {
-                setMsg('Birthday added successfully!');
+                setMsg(editingBirthday ? 'Birthday updated successfully!' : 'Birthday added successfully!');
                 setOpenSnackbar(true);
                 setSeverity('success');
                 handleClose();
@@ -181,10 +240,12 @@ const Page = () => {
                 setName('');
                 setBirthdate('');
                 setBirthMonth('');
+                setRelation('')
+                setEditingBirthday(null)
 
                 fetchBirthdays();
             } else {
-                setMsg('Failed to add birthday.');
+                setMsg(editingBirthday ? 'Failed to update birthday.' : 'Failed to add birthday.');
                 setOpenSnackbar(true);
                 setSeverity('error');
             }
@@ -195,10 +256,6 @@ const Page = () => {
             setSeverity('error');
         }
     };
-
-    const openCheckout = () => {
-        router.push('/pricing')
-    }
 
     useEffect(() => {
         const getCookie = (name) => {
@@ -249,7 +306,7 @@ const Page = () => {
                             },
                         }}>
                             <Grid md={8} sm={8} xs={12}>
-                                <Box sx={{ display: 'flex' }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography sx={{ height: '35px', width: '80px', fontSize: '1rem', color: 'white', fontWeight: '500', fontFamily: 'Rubik', backgroundColor: '#6EACDA', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         {birthday.date} {birthday.month.slice(0, 3)}
                                     </Typography>
@@ -261,17 +318,26 @@ const Page = () => {
                                     }}>
                                         {birthday.name}
                                     </Typography>
+
                                 </Box>
                             </Grid>
                             <Grid md={4} sm={4} xs={12}>
                                 <Typography sx={{
-                                    height: '35px', width: '70%', fontSize: '1rem', color: 'white', fontWeight: '500', fontFamily: 'Rubik', backgroundColor: '#C75B7A', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center', float: 'right',
+                                    height: '35px', width: '55%', fontSize: '1rem', color: 'white', fontWeight: '500', fontFamily: 'Rubik', backgroundColor: '#C75B7A', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center', float: 'right',
                                     "@media (max-width:780px)": {
                                         display: 'none'
                                     },
                                 }}>
                                     {calculateDaysLeft(birthday.date, birthday.month)} Days to go..
                                 </Typography>
+                                <EditIcon
+                                    onClick={() => handleEdit(birthday)}
+                                    sx={{ cursor: 'pointer', color: '#1976d2' }}
+                                />
+                                <DeleteIcon
+                                    onClick={() => handleDelete(birthday)}
+                                    sx={{ cursor: 'pointer', color: '#1976d2' }}
+                                />
                             </Grid>
                         </Grid>
                     ))}
@@ -288,7 +354,7 @@ const Page = () => {
             >
                 <Box sx={style}>
                     <Typography sx={{ fontFamily: 'Rubik', fontSize: '2rem', fontWeight: '700' }}>Add a new Birthday 🎉</Typography>
-                    <TextField fullWidth id="outlined-basic" label="Name" variant="outlined" sx={{ margin: '1rem 0' }} onChange={handleName} />
+                    <TextField fullWidth value={name} id="outlined-basic" label="Name" variant="outlined" sx={{ margin: '1rem 0' }} onChange={handleName} />
                     <FormControl fullWidth sx={{ margin: '1rem 0' }}>
                         <InputLabel id="birth-date-label">Enter Birth Day</InputLabel>
                         <Select
