@@ -5,37 +5,52 @@ import Signup from "../components/Signup";
 import { useEffect, useState } from "react";
 import Pricing from "../components/Pricing";
 import InfiniteScrollBirthdays from "@/components/InfiniteScrollBirthdays";
-
+import { useRouter } from "next/navigation";
 
 const btn = {
-  marginRight: "20px",
   color: "white",
   fontFamily: 'Rubik',
   backgroundColor: "#1976d2",
   height: "40px",
-  width: "auto",
+  width: "fit-content",
   textTransform: 'none',
   borderRadius: '25px',
-  width: '130px',
+  margin: '2rem',
   "&:hover": {
-    backgroundColor: "#915831",
-    color: "white",
+      backgroundColor: "#915831",
+      color: "white",
   },
-  "@media (max-width:780px)": {
-    display: 'none',
+  "@media (max-width:610px)": {
+      float: 'left',
+      margin: '1.2rem 0 0 0.5rem',
+
   },
 };
 
 export default function Home() {
   const [key, setKey] = useState(0);
+  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setKey(prevKey => prevKey + 1);
-    }, 30000); 
+    const getCookie = (name) => {
+        const value = `${document.cookie}`;
+        const parts = value.split(`${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    };
 
-    return () => clearInterval(interval);
-  }, []);
+    const userCookie = getCookie('user');
+    console.log(!userCookie);
+
+    if (!userCookie) {
+        setIsLoggedIn(false)
+        router.push('/');
+    } else {
+        setIsLoggedIn(true);
+        router.push('/birthdays');
+    }
+}, [router]);
+
   return (
     <div>
       <main className={styles.main}>
@@ -50,7 +65,10 @@ export default function Home() {
             <InfiniteScrollBirthdays/>
           </div>
           <Box sx={{ padding: '1rem 0', display: 'grid', justifyContent: 'center' }}>
-            <Signup />
+            {
+              !isLoggedIn ? <Signup /> : <Button href='/birthdays' sx={btn}>Already LoggedIn?? Go to Dashboard</Button>
+            }
+            
             <Pricing/>
           </Box>
         </section>
