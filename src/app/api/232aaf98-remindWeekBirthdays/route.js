@@ -73,6 +73,8 @@ export async function GET(req) {
 
         const allBirthdays = await collection.find({}).toArray();
 
+        console.log(allBirthdays);
+
         const result = allBirthdays.map(user => {
             const upcomingBirthdays = user.birthdays
                 .filter(birthday => calculateDaysLeft(birthday.date, birthday.month) <= 7)
@@ -90,6 +92,8 @@ export async function GET(req) {
             }
             return null;
         }).filter(entry => entry !== null);
+
+        console.log(result);
 
         /* for (const user of result) {
             let { phoneNumber, birthdays } = user;
