@@ -139,10 +139,12 @@ const Signup = () => {
                         value={phoneNumber}
                         onChange={setPhoneNumber}
                         addInternationalOption={false}
+                        international = {false}
                         defaultCountry="IN"
+                        countries={["IN", "US"]}
                         className="custom-phone-input"
                     />
-                    <Button disabled = {!isPossiblePhoneNumber(phoneNumber ?? "")} variant="contained" color="primary" type="submit" fullWidth>
+                    <Button disabled={!isPossiblePhoneNumber(phoneNumber ?? "")} variant="contained" color="primary" type="submit" fullWidth>
                         Send OTP
                     </Button>
                     {/* <Button variant="contained" color="primary" type="submit" fullWidth>

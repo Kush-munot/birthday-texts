@@ -47,7 +47,8 @@ const pro_plan = [
 const page = () => {
     const [paddle, setPaddle] = useState();
     const [custId, setCustId] = useState('');
-    const [subsId, setSubsId] = useState('');
+    const [subsId, setSubsId] = useState(null);
+    const [isSubscribed, setIsSubscribed] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState('');
     const [paused, setPaused] = useState(false)
 
@@ -76,9 +77,11 @@ const page = () => {
         if (response.ok) {
             const data = await response.json();
             setSubsId(data.subsId);
+            setIsSubscribed(data.isSubscribed)
         } else {
             console.error('Error fetching customer ID:', response.statusText);
         }
+        console.log(isSubscribed);
     });
 
     useEffect(() => {
@@ -93,6 +96,7 @@ const page = () => {
         const userCookie = getCookie('user');
         getCustomerId();
         getSubsId();
+        console.log(subsId);
     }, [phoneNumber, getCustomerId, getSubsId]);
 
     useEffect(() => {
@@ -142,7 +146,7 @@ const page = () => {
         }
     };
 
-    const openCheckoutPaused = async () => {
+    /* const openCheckoutPaused = async () => {
         //console.log("paused clicked");
         setPaused(!paused);
         //console.log(subsId);
@@ -257,7 +261,7 @@ const page = () => {
             setOpenSnackbar(true);
             setSeverity('error');
         }
-    };
+    }; */
     return (
         <div style={{ padding: '10% 2%' }}>
             <Typography sx={title}>Pricing</Typography>
@@ -290,23 +294,44 @@ const page = () => {
                             </ListItem>
                         ))}
                     </List>
-                    <Button sx={{
-                        borderRadius: "5px",
-                        border: 0,
-                        color: "white",
-                        textTransform: 'none',
-                        backgroundColor: '#000',
-                        opacity: '60%',
-                        fontSize: '1.2rem',
-                        width: '75%',
-                        padding: "10px",
-                        m: '4% 10%',
-                        "&:hover": {
-                            backgroundColor: '#000',
-                            color: 'white',
-                        },
+                    {
+                        !isSubscribed ?
+                            <Button sx={{
+                                borderRadius: "5px",
+                                border: 0,
+                                color: "white",
+                                textTransform: 'none',
+                                backgroundColor: '#000',
+                                opacity: '60%',
+                                fontSize: '1.2rem',
+                                width: '75%',
+                                padding: "10px",
+                                m: '4% 10%',
+                                "&:hover": {
+                                    backgroundColor: '#000',
+                                    color: 'white',
+                                },
 
-                    }} onClick={openCheckoutMonthly} > Subscribe Monthly Plan </Button>
+                            }} onClick={openCheckoutMonthly} > Subscribe Monthly Plan </Button>
+                            :
+                            <Button sx={{
+                                borderRadius: "5px",
+                                border: 0,
+                                color: "white",
+                                textTransform: 'none',
+                                backgroundColor: '#000',
+                                opacity: '60%',
+                                fontSize: '1.2rem',
+                                width: '75%',
+                                padding: "10px",
+                                m: '4% 10%',
+                                "&:hover": {
+                                    backgroundColor: '#000',
+                                    color: 'white',
+                                },
+
+                            }} href='/birthdays'> Go To Dashboard </Button>
+                    }
                 </Grid>
                 <Grid item lg={5.5} md={5.5} xs={11} sx={{ height: 'auto', border: '2px solid #1976d2', borderRadius: '20px', marginLeft: '3%', backgroundColor: '#ffff', mt: '5px' }}>
                     <Button sx={{
@@ -335,27 +360,50 @@ const page = () => {
                             </ListItem>
                         ))}
                     </List>
-                    <Button sx={{
-                        borderRadius: "5px",
-                        border: 0,
-                        color: "white",
-                        textTransform: 'none',
-                        backgroundColor: '#000',
-                        opacity: '60%',
-                        fontSize: '1.2rem',
-                        width: '75%',
-                        padding: "10px",
-                        m: '4% 10%',
-                        "&:hover": {
-                            backgroundColor: '#000',
-                            color: 'white',
-                        },
+                    
+                    {
+                        !isSubscribed ?
+                            <Button sx={{
+                                borderRadius: "5px",
+                                border: 0,
+                                color: "white",
+                                textTransform: 'none',
+                                backgroundColor: '#000',
+                                opacity: '60%',
+                                fontSize: '1.2rem',
+                                width: '75%',
+                                padding: "10px",
+                                m: '4% 10%',
+                                "&:hover": {
+                                    backgroundColor: '#000',
+                                    color: 'white',
+                                },
 
-                    }} onClick={openCheckoutYearly}> Subscribe Yearly Plan </Button>
+                            }} onClick={openCheckoutYearly}> Subscribe Yearly Plan </Button>
+                            :
+                            <Button sx={{
+                                borderRadius: "5px",
+                                border: 0,
+                                color: "white",
+                                textTransform: 'none',
+                                backgroundColor: '#000',
+                                opacity: '60%',
+                                fontSize: '1.2rem',
+                                width: '75%',
+                                padding: "10px",
+                                m: '4% 10%',
+                                "&:hover": {
+                                    backgroundColor: '#000',
+                                    color: 'white',
+                                },
+
+                            }} href='/birthdays'> Go To Dashboard </Button>
+                    }
+
                 </Grid>
             </Grid>
 
-            <Grid container spacing={2} sx={{
+            {/* <Grid container spacing={2} sx={{
                 margin: '3% 0',
                 width: 'auto'
             }}>
@@ -368,7 +416,7 @@ const page = () => {
                 <Grid md={4} sm={4} xs={12}>
                     <Button href='/birthdays' sx={btn}>Dashboard</Button>
                 </Grid>
-            </Grid>
+            </Grid> */}
             <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
                 <Alert onClose={handleCloseSnackbar} severity={severity} sx={{ width: '100%' }}>
                     {msg}

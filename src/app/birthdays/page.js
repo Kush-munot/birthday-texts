@@ -18,6 +18,27 @@ const btn = {
     fontFamily: 'Rubik',
     backgroundColor: "#1976d2",
     height: "40px",
+    width: "auto",
+    textTransform: 'none',
+    borderRadius: '25px',
+    margin: '1rem 0',
+    float: 'right',
+    "&:hover": {
+        backgroundColor: "#915831",
+        color: "white",
+    },
+    "@media (max-width:610px)": {
+        float: 'left',
+        margin: '1.2rem 0 0 0.5rem',
+
+    },
+};
+
+const subsBtn = {
+    color: "white",
+    fontFamily: 'Rubik',
+    backgroundColor: "#1976d2",
+    height: "40px",
     width: "140px",
     textTransform: 'none',
     borderRadius: '25px',
@@ -105,6 +126,8 @@ const Page = () => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [msg, setMsg] = useState('');
     const [severity, setSeverity] = useState('');
+    const [subsId, setSubsId] = useState('');
+    const [canceled, setCanceled] = useState(false)
     const [isSubscribed, setIsSubscribed] = useState(false);
     const [birthdayData, setBirthdayData] = useState([]);
     const [editingBirthday, setEditingBirthday] = useState(null);
@@ -126,6 +149,76 @@ const Page = () => {
         setRelation({ title: birthday.relationship });
         handleOpen();
     };
+    const fetchBirthdays = useCallback(async () => {
+        try {
+            const response = await fetch(`/api/birthdays?phoneNumber=${phoneNumber}`, {
+                method: 'GET',
+            });
+
+            const data = await response.json();
+
+            //console.log("Data.isSubs", data);
+
+            if (data.isSubscribed) {
+                setIsSubscribed(true);
+            }
+
+            if (isLoggedIn && data.success) {
+                const monthNames = [
+                    "January", "February", "March", "April", "May", "June",
+                    "July", "August", "September", "October", "November", "December"
+                ];
+
+                const sortedBirthdays = data.birthdays.sort((a, b) => {
+                    const today = new Date();
+                    // console.log(`Today's date: ${today}`);
+
+                    // Find the index of the month from the monthNames array
+                    const monthIndexA = monthNames.indexOf(a.month); // Get the month index for A
+                    const monthIndexB = monthNames.indexOf(b.month); // Get the month index for B
+
+                    // if (monthIndexA === -1) {
+                    //     console.error(`Invalid month name for A: ${a.month}`);
+                    //     return 0; // Skip sorting for invalid entries
+                    // }
+                    // if (monthIndexB === -1) {
+                    //     console.error(`Invalid month name for B: ${b.month}`);
+                    //     return 0; // Skip sorting for invalid entries
+                    // }
+
+                    // Construct Date objects using the month index
+                    let nextA = new Date(today.getFullYear(), monthIndexA, a.date);
+                    let nextB = new Date(today.getFullYear(), monthIndexB, b.date);
+
+                    // Log constructed dates
+                    // console.log(`Constructed nextA: ${nextA} for month: ${a.month}, date: ${a.date}`);
+                    // console.log(`Constructed nextB: ${nextB} for month: ${b.month}, date: ${b.date}`);
+
+                    // Check for invalid dates
+                    if (isNaN(nextA.getTime())) {
+                        console.error(`Invalid date for A: month = ${a.month}, date = ${a.date}`);
+                    }
+                    if (isNaN(nextB.getTime())) {
+                        console.error(`Invalid date for B: month = ${b.month}, date = ${b.date}`);
+                    }
+
+                    // Adjust year for past birthdays
+                    if (nextA < today) nextA.setFullYear(today.getFullYear() + 1);
+                    if (nextB < today) nextB.setFullYear(today.getFullYear() + 1);
+
+                    // Sort in ascending order of upcoming birthdays
+                    return nextA - nextB;
+                });
+                console.log(sortedBirthdays);
+                setBirthdayData(sortedBirthdays);
+            }
+        } catch (error) {
+            console.error('Error fetching birthdays:', error);
+            setMsg('An error occurred. Please try again.');
+            setOpenSnackbar(true);
+            setSeverity('error');
+        }
+    }, [phoneNumber]);
     const handleDelete = async (birthday) => {
         try {
             const response = await fetch('/api/birthdays', {
@@ -161,34 +254,115 @@ const Page = () => {
         }
     };
 
+    const getSubsId = useCallback(async () => {
+        const apiUrl = `/api/subsId?phoneNumber=${phoneNumber}`;
+
+        const response = await fetch(apiUrl);
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+            setSubsId(data.subsId);
+            console.log(subsId);
+        } else {
+            console.error('Error fetching customer ID:', response.statusText);
+        }
+    });
+
     const openCheckout = () => {
         router.push('/pricing')
     }
 
-    const fetchBirthdays = useCallback(async () => {
+    useEffect(() => {
+        const getCookie = (name) => {
+            const value = `${document.cookie}`;
+            const parts = value.split(`${name}=`);
+            //console.log(parts[1]);
+            setPhoneNumber(parts[1]);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        };
+
+        const userCookie = getCookie('user');
+
+        if (!userCookie) {
+            setIsLoggedIn(false);
+            router.push('/');
+        } else {
+            console.log("into else");
+            setIsLoggedIn(true);
+            fetchBirthdays();
+        }
+    }, [router, fetchBirthdays]);
+
+    useEffect(() => {
+        if (isLoggedIn && phoneNumber) {
+            getSubsId();
+        }
+    }, [isLoggedIn, phoneNumber]);
+
+
+
+    const openCancelSubscription = async () => {
+        console.log("cancel clicked");
+        setCanceled(!canceled);
+        console.log(subsId);
         try {
-            const response = await fetch(`/api/birthdays?phoneNumber=${phoneNumber}`, {
-                method: 'GET',
+            // Call your backend API route instead of Paddle's API
+            const response = await fetch('/api/cancelSubscription', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    subsId
+                }),
             });
 
+
             const data = await response.json();
+            //console.log(response.ok);
+            if (!response.ok) {
+                setMsg(`Error: ${response.status}. Unable to Cancel the Subscription.`);
+                setOpenSnackbar(true);
+                setSeverity('error');
+                throw new Error(`Error: ${response.status} ${response.statusText}`)
+            } else {
+                // Now make the second API call to /api/updateSubscription
+                const updateSubscriptionResponse = await fetch('/api/updateSubscription', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        subscriptionId: subsId,
+                        isSubscribed: false
+                    }),
+                });
 
-            //console.log("Data.isSubs", data);
+                //console.log(updateSubscriptionResponse.ok);
 
-            if (data.isSubscribed) {
-                setIsSubscribed(true);
+                if (!updateSubscriptionResponse.ok) {
+                    setMsg(`Error: ${updateSubscriptionResponse.status}. Unable to Cancel Subscription`);
+                    setOpenSnackbar(true);
+                    setSeverity('error');
+                } else {
+                    setMsg('Subscription cancelled successfully!!', data);
+                    setOpenSnackbar(true);
+                    setSeverity('success');
+                    router.push('/success')
+                }
+
             }
 
-            if (isLoggedIn && data.success) {
-                setBirthdayData(data.birthdays);
-            }
         } catch (error) {
-            console.error('Error fetching birthdays:', error);
-            setMsg('An error occurred. Please try again.');
+            console.error('Error in API calls:', error);
+            setMsg(`${error}- Unable to Cancel Subscription.`);
             setOpenSnackbar(true);
             setSeverity('error');
         }
-    }, [phoneNumber]);
+    };
+
+
 
     const handleSubmit = async () => {
         if (!birthDate || !birthMonth) {
@@ -261,54 +435,69 @@ const Page = () => {
         }
     };
 
-    useEffect(() => {
-        const getCookie = (name) => {
-            const value = `${document.cookie}`;
-            const parts = value.split(`${name}=`);
-            //console.log(parts[1]);
-            setPhoneNumber(parts[1]);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-        };
 
-        const userCookie = getCookie('user');
-
-        if (!userCookie) {
-            setIsLoggedIn(false);
-            router.push('/');
-        } else {
-            setIsLoggedIn(true);
-            fetchBirthdays();
-        }
-    }, [router, fetchBirthdays]);
 
     return (
         <>
             {isLoggedIn ? (
-                <div style={{ padding: '8rem 1rem 5rem 2rem' }}>
-                    <Grid container spacing={2} sx={{
-                        padding: '0 2% 0% 2%', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik', "@media (max-width:600px)": {
-                            padding: '4%'
-                        },
-                    }}>
-                        <Grid md={8} sm={8} xs={12}>
-                            <h2>Upcoming Birthdays 📆</h2>
-                        </Grid>
-                        <Grid md={4} sm={4} xs={12}>
-                            {
-                                isSubscribed ?
-                                    <Button onClick={handleOpen} sx={btn}>+ Add Birthday</Button>
-                                    :
-                                    <Button onClick={openCheckout} sx={btn}>Subscribe</Button>
-                            }
-                        </Grid>
-                    </Grid>
+                <div style={{ padding: '8rem 1rem 5rem 2rem', minHeight: '100vh', }}>
+                    {
+                        !isSubscribed ?
+                            <div>
+                                <Grid container spacing={2} sx={{
+                                    padding: '0 2% 0% 2%', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik', "@media (max-width:600px)": {
+                                        padding: '4%'
+                                    },
+                                }}>
+                                    <Grid md={8} sm={8} xs={12}>
+                                        <h2>Upcoming Birthdays 📆</h2>
+                                    </Grid>
+                                    <Grid md={4} sm={4} xs={12}>
+                                        <Button onClick={openCheckout} sx={btn}>Subscribe</Button>
+                                    </Grid>
+                                </Grid>
+                            </div>
+                            :
+                            <div>
+                                <Grid container spacing={2} sx={{
+                                    padding: '0 2% 0% 2%', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik', "@media (max-width:600px)": {
+                                        padding: '4%'
+                                    },
+                                }}>
+                                    <Grid container spacing={2} sx={{
+                                        padding: '0 2% 0% 2%', fontFamily: 'Rubik', "@media (max-width:600px)": {
+                                            padding: '4%'
+                                        },
+                                    }}>
+                                        <Grid md={8} sm={8} xs={12}>
+                                            <h2>Upcoming Birthdays 📆</h2>
+                                        </Grid>
+                                        <Grid md={4} sm={4} xs={12} sx={{display:'flex', alignItems:'center', justifyContent:'right'}}>
+                                            <h6>Whatsapp reminders sent @9AM EST
+                                                to {phoneNumber}</h6>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid md={12} sm={12} xs={12}>
+                                        <div style={{
+                                            display: 'flex',
+                                            position: 'relative',
+                                            justifyContent: 'space-between'
+                                        }}>
+                                            <Button onClick={handleOpen} sx={btn}>+ Add Birthday</Button>
+                                            <Button onClick={openCancelSubscription} sx={btn}>Cancel Subscription</Button>
+                                        </div>
+                                    </Grid>
+                                </Grid>
+                            </div>
+                    }
+
                     {birthdayData.map((birthday, index) => (
                         <Grid key={index} container spacing={2} sx={{
                             padding: '4% 2% 0 0', fontFamily: 'Rubik', "@media (max-width:600px)": {
                                 padding: '7% 2% 0 0'
                             },
                         }}>
-                            <Grid md={8} sm={8} xs={12}>
+                            <Grid md={6.5} sm={6.5} xs={10}>
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography sx={{ height: '35px', width: '80px', fontSize: '1rem', color: 'white', fontWeight: '500', fontFamily: 'Rubik', backgroundColor: '#6EACDA', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         {birthday.date} {birthday.month.slice(0, 3)}
@@ -324,15 +513,7 @@ const Page = () => {
 
                                 </Box>
                             </Grid>
-                            <Grid md={4} sm={4} xs={12}>
-                                <Typography sx={{
-                                    height: '35px', width: '55%', fontSize: '1rem', color: 'white', fontWeight: '500', fontFamily: 'Rubik', backgroundColor: '#C75B7A', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center', float: 'right',
-                                    "@media (max-width:780px)": {
-                                        display: 'none'
-                                    },
-                                }}>
-                                    {calculateDaysLeft(birthday.date, birthday.month)} Days to go..
-                                </Typography>
+                            <Grid md={2} sm={2} xs={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                                 <EditIcon
                                     onClick={() => handleEdit(birthday)}
                                     sx={{ cursor: 'pointer', color: '#1976d2' }}
@@ -342,12 +523,23 @@ const Page = () => {
                                     sx={{ cursor: 'pointer', color: '#1976d2' }}
                                 />
                             </Grid>
+                            <Grid md={3.5} sm={3.5} xs={12} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'right' }}>
+                                <Typography sx={{
+                                    height: '35px', width: 'fit-content', padding: '0 0.5rem', fontSize: '1rem', color: 'white', fontWeight: '500', fontFamily: 'Rubik', backgroundColor: '#C75B7A', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center', float: 'right',
+                                    "@media (max-width:780px)": {
+                                        display: 'none'
+                                    },
+                                }}>
+                                    {calculateDaysLeft(birthday.date, birthday.month)} Days to go..
+                                </Typography>
+
+                            </Grid>
                         </Grid>
                     ))}
 
-                </div>
+                </div >
             ) : (
-                <div style={{ paddingTop: '4rem' }}>
+                <div style={{ paddingTop: '4rem', minHeight:'60vh', display:'flex', alignItems:'center', justifyContent:'center' }}>
                     <h1>Loading...</h1>
                 </div>
             )}

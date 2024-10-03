@@ -31,7 +31,7 @@ export async function GET(req) {
 
         // If the user has a customerId, return it
         if (user.customerId) {
-            return new Response(JSON.stringify({ success: true, subsId: user.subscriptionId }), {
+            return new Response(JSON.stringify({ success: true, subsId: user.subscriptionId, isSubscribed: user.isSubscribed }), {
                 status: 200,
             });
         } else {
