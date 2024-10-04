@@ -49,7 +49,7 @@ const page = () => {
     const [custId, setCustId] = useState('');
     const [subsId, setSubsId] = useState(null);
     const [isSubscribed, setIsSubscribed] = useState(false);
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState(null);
     const [paused, setPaused] = useState(false)
 
     const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -299,7 +299,26 @@ const page = () => {
                         ))}
                     </List>
                     {
-                        !isSubscribed ?
+                        phoneNumber != null ?
+                            isSubscribed ?
+                            <Button sx={{
+                                borderRadius: "5px",
+                                border: 0,
+                                color: "white",
+                                textTransform: 'none',
+                                backgroundColor: '#000',
+                                opacity: '60%',
+                                fontSize: '1.2rem',
+                                width: '75%',
+                                padding: "10px",
+                                m: '4% 10%',
+                                "&:hover": {
+                                    backgroundColor: '#000',
+                                    color: 'white',
+                                },
+
+                            }} href='/birthdays'> Go To Dashboard </Button>
+                            :
                             <Button sx={{
                                 borderRadius: "5px",
                                 border: 0,
@@ -334,8 +353,9 @@ const page = () => {
                                     color: 'white',
                                 },
 
-                            }} href='/birthdays'> Go To Dashboard </Button>
+                            }} href='/'> Login to Subscribe </Button>
                     }
+
                 </Grid>
                 <Grid item lg={5.5} md={5.5} xs={11} sx={{ height: 'auto', border: '2px solid #1976d2', borderRadius: '20px', marginLeft: '3%', backgroundColor: '#ffff', mt: '5px' }}>
                     <Button sx={{
@@ -366,7 +386,26 @@ const page = () => {
                     </List>
 
                     {
-                        !isSubscribed ?
+                        phoneNumber != null ?
+                        isSubscribed ?
+                        <Button sx={{
+                            borderRadius: "5px",
+                            border: 0,
+                            color: "white",
+                            textTransform: 'none',
+                            backgroundColor: '#000',
+                            opacity: '60%',
+                            fontSize: '1.2rem',
+                            width: '75%',
+                            padding: "10px",
+                            m: '4% 10%',
+                            "&:hover": {
+                                backgroundColor: '#000',
+                                color: 'white',
+                            },
+
+                        }} href='/birthdays'> Go To Dashboard </Button>
+                            :
                             <Button sx={{
                                 borderRadius: "5px",
                                 border: 0,
@@ -401,7 +440,7 @@ const page = () => {
                                     color: 'white',
                                 },
 
-                            }} href='/birthdays'> Go To Dashboard </Button>
+                            }} href='/'> Login to Subscribe </Button>
                     }
 
                 </Grid>
