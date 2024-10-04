@@ -4,20 +4,14 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 
 const title = {
-    fontFamily: 'Rubik',
+    fontFamily: 'Inter',
     fontSize: '2rem',
     fontWeight: '700',
     margin: '1% 0'
 }
-const title1 = {
-    fontFamily: 'Rubik',
-    fontSize: '1.5rem',
-    fontWeight: '700',
-    margin: '2% 0'
-}
 
 const text = {
-    fontFamily: 'Rubik',
+    fontFamily: 'Inter',
     fontSize: '1rem',
     paddingBottom: '1rem'
 }
@@ -50,7 +44,7 @@ const Pricing = () => {
                     }}>
                         <Typography sx={{ textTransform: 'none', fontWeight: '500' }}>Monthly</Typography>
                     </Button>
-                    <Typography sx={{ fontSize: '62px', fontFamily: 'Nunito Sans', fontWeight: '700', ml: '5%' }}>$ 1.99 <span style={{ fontSize: '22px', fontFamily: 'Nunito Sans', fontWeight: '700' }}>/per month</span></Typography>
+                    <Typography sx={{ fontSize: '3rem', fontFamily: 'Nunito Sans', fontWeight: '700', ml: '5%' }}>$ 1.99 <span style={{ fontSize: '18px', fontFamily: 'Nunito Sans', fontWeight: '700' }}>/per month</span></Typography>
                     <List sx={{ mt: '5%' }}>
                         {pro_plan.map((feature, index) => (
                             <ListItem key={index}>

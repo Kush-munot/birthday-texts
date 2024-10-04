@@ -3,7 +3,8 @@ import { Box, Grid, Link, Typography } from "@mui/material";
 
 const link = {
     textDecoration: 'none',
-    fontFamily: 'Rubik',
+    fontFamily: 'Inter',
+    fontSize:'14px',
     color: '#1976d2',
 }
 const Footer = () => {
@@ -16,10 +17,10 @@ const Footer = () => {
             }}
         >
             <Grid xs={12} md={6} lg={6}>
-                <Typography sx={{ fontStyle: "normal", fontWeight: 700, fontSize: 22 }}>
+                <Typography sx={{ fontStyle: "normal", fontWeight: 700, fontSize: 18 }}>
                     © 2024 Birthdayremind
                 </Typography>
-                <Typography sx={{ fontStyle: "normal", fontWeight: 400, fontSize: 15 }}>
+                <Typography sx={{ fontStyle: "normal", fontWeight: 400, fontSize: 12 }}>
                     Simple birthday reminders via WhatsApp.
                 </Typography>
             </Grid>

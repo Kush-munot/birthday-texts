@@ -13,12 +13,12 @@ import { useRouter } from 'next/navigation';
 const btn = {
     marginRight: "20px",
     color: "white",
-    fontFamily: 'Rubik',
+    fontFamily: 'Inter',
     backgroundColor: "#1976d2",
     height: "40px",
     width: "auto",
     textTransform: 'none',
-    borderRadius: '25px',
+    borderRadius: '5px',
     width: '90px',
     "&:hover": {
         backgroundColor: "#915831",
@@ -114,7 +114,7 @@ export default function Navbar() {
                                         fontSize: 20,
                                         width: "auto",
                                         ml: 2,
-                                        fontFamily: 'Rubik'
+                                        fontFamily: 'Inter'
                                     }}
                                 >
                                     Birthdayremind🎂

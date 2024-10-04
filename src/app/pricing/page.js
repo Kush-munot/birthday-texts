@@ -6,19 +6,19 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { initializePaddle } from "@paddle/paddle-js";
 
 const title = {
-    fontFamily: 'Rubik',
-    fontSize: '2rem',
+    fontFamily: 'Inter',
+    fontSize: '1.5rem',
     fontWeight: '700',
     margin: '1% 0'
 }
 const btn = {
     color: "white",
-    fontFamily: 'Rubik',
+    fontFamily: 'Inter',
     backgroundColor: "#1976d2",
     height: "40px",
     width: "200px",
     textTransform: 'none',
-    borderRadius: '25px',
+    borderRadius: '5px',
     margin: '2rem',
     "&:hover": {
         backgroundColor: "#915831",
@@ -32,8 +32,8 @@ const btn = {
 };
 
 const text = {
-    fontFamily: 'Rubik',
-    fontSize: '1rem',
+    fontFamily: 'Inter',
+    fontSize: '0.85rem',
     paddingBottom: '1rem'
 }
 
@@ -285,8 +285,8 @@ const page = () => {
                     }}>
                         <Typography sx={{ textTransform: 'none', fontWeight: '500' }}>Monthly</Typography>
                     </Button>
-                    <Typography sx={{ fontSize: '62px', fontFamily: 'Nunito Sans', fontWeight: '700', ml: '5%' }}>$ 1.99 <span style={{ fontSize: '22px', fontFamily: 'Nunito Sans', fontWeight: '700' }}>/per month</span></Typography>
-                    <List sx={{ mt: '5%' }}>
+                    <Typography sx={{ fontSize: '3.5rem', fontFamily: 'Nunito Sans', fontWeight: '700', ml: '5%' }}>$ 1.99 <span style={{ fontSize: '1.25rem', fontFamily: 'Nunito Sans', fontWeight: '500' }}>/per month</span></Typography>
+                    <List sx={{  fontSize:'0.85rem' }}>
                         {pro_plan.map((feature, index) => (
                             <ListItem key={index}>
                                 <ListItemIcon>
@@ -301,41 +301,41 @@ const page = () => {
                     {
                         phoneNumber != null ?
                             isSubscribed ?
-                            <Button sx={{
-                                borderRadius: "5px",
-                                border: 0,
-                                color: "white",
-                                textTransform: 'none',
-                                backgroundColor: '#000',
-                                opacity: '60%',
-                                fontSize: '1.2rem',
-                                width: '75%',
-                                padding: "10px",
-                                m: '4% 10%',
-                                "&:hover": {
+                                <Button sx={{
+                                    borderRadius: "5px",
+                                    border: 0,
+                                    color: "white",
+                                    textTransform: 'none',
                                     backgroundColor: '#000',
-                                    color: 'white',
-                                },
+                                    opacity: '60%',
+                                    fontSize: '1.2rem',
+                                    width: '75%',
+                                    padding: "10px",
+                                    m: '4% 10%',
+                                    "&:hover": {
+                                        backgroundColor: '#000',
+                                        color: 'white',
+                                    },
 
-                            }} href='/birthdays'> Go To Dashboard </Button>
-                            :
-                            <Button sx={{
-                                borderRadius: "5px",
-                                border: 0,
-                                color: "white",
-                                textTransform: 'none',
-                                backgroundColor: '#000',
-                                opacity: '60%',
-                                fontSize: '1.2rem',
-                                width: '75%',
-                                padding: "10px",
-                                m: '4% 10%',
-                                "&:hover": {
+                                }} href='/birthdays'> Go To Dashboard </Button>
+                                :
+                                <Button sx={{
+                                    borderRadius: "5px",
+                                    border: 0,
+                                    color: "white",
+                                    textTransform: 'none',
                                     backgroundColor: '#000',
-                                    color: 'white',
-                                },
+                                    opacity: '60%',
+                                    fontSize: '1.2rem',
+                                    width: '75%',
+                                    padding: "10px",
+                                    m: '4% 10%',
+                                    "&:hover": {
+                                        backgroundColor: '#000',
+                                        color: 'white',
+                                    },
 
-                            }} onClick={openCheckoutMonthly} > Subscribe Monthly Plan </Button>
+                                }} onClick={openCheckoutMonthly} > Subscribe Monthly Plan </Button>
                             :
                             <Button sx={{
                                 borderRadius: "5px",
@@ -371,8 +371,8 @@ const page = () => {
                     }}>
                         <Typography sx={{ textTransform: 'none', fontWeight: '500' }}>Annually</Typography>
                     </Button>
-                    <Typography sx={{ fontSize: '62px', fontFamily: 'Nunito Sans', fontWeight: '700', ml: '5%' }}>$ 19.99 <span style={{ fontSize: '22px', fontFamily: 'Nunito Sans', fontWeight: '700' }}>/per year</span></Typography>
-                    <List sx={{ mt: '5%' }}>
+                    <Typography sx={{ fontSize: '3.5rem', fontFamily: 'Nunito Sans', fontWeight: '700', ml: '5%' }}>$ 19.99 <span style={{ fontSize: '1.25rem', fontFamily: 'Nunito Sans', fontWeight: '500' }}>/per year</span></Typography>
+                    <List sx={{}}>
                         {pro_plan.map((feature, index) => (
                             <ListItem key={index}>
                                 <ListItemIcon>
@@ -387,42 +387,42 @@ const page = () => {
 
                     {
                         phoneNumber != null ?
-                        isSubscribed ?
-                        <Button sx={{
-                            borderRadius: "5px",
-                            border: 0,
-                            color: "white",
-                            textTransform: 'none',
-                            backgroundColor: '#000',
-                            opacity: '60%',
-                            fontSize: '1.2rem',
-                            width: '75%',
-                            padding: "10px",
-                            m: '4% 10%',
-                            "&:hover": {
-                                backgroundColor: '#000',
-                                color: 'white',
-                            },
-
-                        }} href='/birthdays'> Go To Dashboard </Button>
-                            :
-                            <Button sx={{
-                                borderRadius: "5px",
-                                border: 0,
-                                color: "white",
-                                textTransform: 'none',
-                                backgroundColor: '#000',
-                                opacity: '60%',
-                                fontSize: '1.2rem',
-                                width: '75%',
-                                padding: "10px",
-                                m: '4% 10%',
-                                "&:hover": {
+                            isSubscribed ?
+                                <Button sx={{
+                                    borderRadius: "5px",
+                                    border: 0,
+                                    color: "white",
+                                    textTransform: 'none',
                                     backgroundColor: '#000',
-                                    color: 'white',
-                                },
+                                    opacity: '60%',
+                                    fontSize: '1.2rem',
+                                    width: '75%',
+                                    padding: "10px",
+                                    m: '4% 10%',
+                                    "&:hover": {
+                                        backgroundColor: '#000',
+                                        color: 'white',
+                                    },
 
-                            }} onClick={openCheckoutYearly}> Subscribe Yearly Plan </Button>
+                                }} href='/birthdays'> Go To Dashboard </Button>
+                                :
+                                <Button sx={{
+                                    borderRadius: "5px",
+                                    border: 0,
+                                    color: "white",
+                                    textTransform: 'none',
+                                    backgroundColor: '#000',
+                                    opacity: '60%',
+                                    fontSize: '1.2rem',
+                                    width: '75%',
+                                    padding: "10px",
+                                    m: '4% 10%',
+                                    "&:hover": {
+                                        backgroundColor: '#000',
+                                        color: 'white',
+                                    },
+
+                                }} onClick={openCheckoutYearly}> Subscribe Yearly Plan </Button>
                             :
                             <Button sx={{
                                 borderRadius: "5px",

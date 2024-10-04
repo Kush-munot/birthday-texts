@@ -15,7 +15,7 @@ const filter = createFilterOptions();
 
 const btn = {
     color: "white",
-    fontFamily: 'Rubik',
+    fontFamily: 'Inter',
     backgroundColor: "#1976d2",
     height: "40px",
     width: "auto",
@@ -36,7 +36,7 @@ const btn = {
 
 const subsBtn = {
     color: "white",
-    fontFamily: 'Rubik',
+    fontFamily: 'Inter',
     backgroundColor: "#1976d2",
     height: "40px",
     width: "140px",
@@ -56,7 +56,7 @@ const subsBtn = {
 };
 const mbtn = {
     color: "white",
-    fontFamily: 'Rubik',
+    fontFamily: 'Inter',
     backgroundColor: "#1976d2",
     height: "40px",
     width: "140px",
@@ -445,7 +445,7 @@ const Page = () => {
                         !isSubscribed ?
                             <div>
                                 <Grid container spacing={2} sx={{
-                                    padding: '0 2% 0% 2%', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik', "@media (max-width:600px)": {
+                                    padding: '0 2% 0% 2%', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Inter', "@media (max-width:600px)": {
                                         padding: '4%'
                                     },
                                 }}>
@@ -460,19 +460,19 @@ const Page = () => {
                             :
                             <div>
                                 <Grid container spacing={2} sx={{
-                                    padding: '0 2% 0% 2%', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik', "@media (max-width:600px)": {
+                                    padding: '0 2% 0% 2%', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Inter', "@media (max-width:600px)": {
                                         padding: '4%'
                                     },
                                 }}>
                                     <Grid container spacing={2} sx={{
-                                        padding: '0 2% 0% 2%', fontFamily: 'Rubik', "@media (max-width:600px)": {
+                                        padding: '0 2% 0% 2%', fontFamily: 'Inter', "@media (max-width:600px)": {
                                             padding: '4%'
                                         },
                                     }}>
                                         <Grid md={8} sm={8} xs={12}>
                                             <h2>Upcoming Birthdays 📆</h2>
                                         </Grid>
-                                        <Grid md={4} sm={4} xs={12} sx={{display:'flex', alignItems:'center', justifyContent:'right'}}>
+                                        <Grid md={4} sm={4} xs={12} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'right' }}>
                                             <h6>Whatsapp reminders sent @9AM EST
                                                 to {phoneNumber}</h6>
                                         </Grid>
@@ -493,17 +493,17 @@ const Page = () => {
 
                     {birthdayData.map((birthday, index) => (
                         <Grid key={index} container spacing={2} sx={{
-                            padding: '4% 2% 0 0', fontFamily: 'Rubik', "@media (max-width:600px)": {
+                            padding: '4% 2% 0 0', fontFamily: 'Inter', "@media (max-width:600px)": {
                                 padding: '7% 2% 0 0'
                             },
                         }}>
                             <Grid md={6.5} sm={6.5} xs={10}>
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <Typography sx={{ height: '35px', width: '80px', fontSize: '1rem', color: 'white', fontWeight: '500', fontFamily: 'Rubik', backgroundColor: '#6EACDA', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Typography sx={{ height: '35px', width: '80px', fontSize: '0.85rem', color: '#2563eb', fontWeight: '400', fontFamily: 'Inter', backgroundColor: '#dbeafe', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         {birthday.date} {birthday.month.slice(0, 3)}
                                     </Typography>
                                     <Typography sx={{
-                                        margin: '0 5%', fontSize: '1.7rem', fontWeight: '500', fontFamily: 'Rubik', display: 'flex', justifyContent: 'center', alignItems: 'center',
+                                        margin: '0 5%', fontSize: '1.7rem', fontWeight: '500', fontFamily: 'Inter', display: 'flex', justifyContent: 'center', alignItems: 'center',
                                         "@media (max-width:600px)": {
                                             fontSize: '1.2rem'
                                         },
@@ -525,7 +525,7 @@ const Page = () => {
                             </Grid>
                             <Grid md={3.5} sm={3.5} xs={12} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'right' }}>
                                 <Typography sx={{
-                                    height: '35px', width: 'fit-content', padding: '0 0.5rem', fontSize: '1rem', color: 'white', fontWeight: '500', fontFamily: 'Rubik', backgroundColor: '#C75B7A', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center', float: 'right',
+                                    height: '35px', width: 'fit-content', padding: '0 0.5rem', fontSize: '1rem', color: 'white', fontWeight: '500', fontFamily: 'Inter', backgroundColor: '#C75B7A', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center', float: 'right',
                                     "@media (max-width:780px)": {
                                         display: 'none'
                                     },
@@ -539,7 +539,7 @@ const Page = () => {
 
                 </div >
             ) : (
-                <div style={{ paddingTop: '4rem', minHeight:'60vh', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <div style={{ paddingTop: '4rem', minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <h1>Loading...</h1>
                 </div>
             )}
@@ -548,7 +548,7 @@ const Page = () => {
                 onClose={handleClose}
             >
                 <Box sx={style}>
-                    <Typography sx={{ fontFamily: 'Rubik', fontSize: '2rem', fontWeight: '700' }}>Add a new Birthday 🎉</Typography>
+                    <Typography sx={{ fontFamily: 'Inter', fontSize: '2rem', fontWeight: '700' }}>Add a new Birthday 🎉</Typography>
                     <TextField fullWidth value={name} id="outlined-basic" label="Name" variant="outlined" sx={{ margin: '1rem 0' }} onChange={handleName} />
                     <FormControl fullWidth sx={{ margin: '1rem 0' }}>
                         <InputLabel id="birth-date-label">Enter Birth Day</InputLabel>

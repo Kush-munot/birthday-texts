@@ -122,7 +122,7 @@ const Signup = () => {
 
     return (
         <div>
-            <Box sx={{ width: '300px', margin: '4% auto', padding: '2px 20px 20px 20px', textAlign: 'center', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik' }}>
+            <Box sx={{ width: '300px', margin: '4% auto', padding: '2px 20px 20px 20px', textAlign: 'center', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Inter' }}>
                 <form onSubmit={handleSubmit}>
                     <p>Sign in or sign up for your free account:</p>
                     {/* <TextField
@@ -139,7 +139,7 @@ const Signup = () => {
                         value={phoneNumber}
                         onChange={setPhoneNumber}
                         addInternationalOption={false}
-                        international = {false}
+                        international={false}
                         defaultCountry="IN"
                         countries={["IN", "US"]}
                         className="custom-phone-input"

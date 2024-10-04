@@ -3,21 +3,21 @@ import { Box, Typography } from '@mui/material'
 import React from 'react'
 
 const title = {
-    fontFamily: 'Rubik',
-    fontSize: '2rem',
+    fontFamily: 'Inter',
+    fontSize: '1.5rem',
     fontWeight: '700'
 }
 
 const title1 = {
-    fontFamily: 'Rubik',
-    fontSize: '1.5rem',
+    fontFamily: 'Inter',
+    fontSize: '1.1rem',
     fontWeight: '700',
     margin: '2% 0'
 }
 
 const text = {
-    fontFamily: 'Rubik',
-    fontSize: '1rem',
+    fontFamily: 'Inter',
+    fontSize: '0.85rem',
 }
 
 const page = () => {
@@ -69,7 +69,7 @@ const page = () => {
             <Typography sx={title1}>
                 Prohibited Conduct
             </Typography>
-            <ul style={{ lineHeight: '2rem' }}>
+            <ul style={{ lineHeight: '2rem', fontSize:'0.85rem' }}>
                 <li>Use the Service for any illegal purpose or in violation of any local, state, national, or international law.</li>
                 <li>Engage in any conduct that restricts or inhibits any other user from using or enjoying the Service.</li>
                 <li>Use the Service to transmit any content that is defamatory, obscene, harmful, threatening, harassing, abusive, hateful, or otherwise objectionable.</li>
@@ -95,7 +95,7 @@ const page = () => {
             <Typography sx={title1}>
                 You represent and warrant that:
             </Typography>
-            <ul style={{ lineHeight: '2rem' }}>
+            <ul style={{ lineHeight: '2rem', fontSize:'0.85rem' }}>
                 <li>You own or have the necessary rights to use and grant us the rights to your User Content.</li>
                 <li>Your User Content does not infringe, violate, or misappropriate any third-party rights, including intellectual property rights, privacy rights, and publicity rights.</li>
                 <li>Your User Content does not contain any defamatory, obscene, or otherwise unlawful material.</li>
@@ -131,7 +131,7 @@ const page = () => {
             <Typography sx={text}>
                 To the fullest extent permitted by applicable law, in no event will ValueCreate Ventures LLP, its affiliates, officers, directors, employees, agents, or licensors be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses, resulting from:
             </Typography>
-            <ul style={{ lineHeight: '2rem' }}>
+            <ul style={{ lineHeight: '2rem', fontSize:'0.85rem' }}>
                 <li>Your use or inability to use the Service;</li>
                 <li>Any unauthorized access to or use of our servers and/or any personal information stored therein;</li>
                 <li>Any bugs, viruses, trojan horses, or the like that may be transmitted to or through our Service by any third party;</li>
@@ -147,7 +147,7 @@ const page = () => {
             <Typography sx={text}>
                 You agree to indemnify, defend, and hold harmless ValueCreate Ventures LLP, its affiliates, officers, directors, employees, agents, and licensors from and against any and all claims, liabilities, damages, losses, costs, expenses, fees (including reasonable attorneys' fees) arising from or related to:
             </Typography>
-            <ul style={{ lineHeight: '2rem' }}>
+            <ul style={{ lineHeight: '2rem', fontSize:'0.85rem' }}>
                 <li>Your use of the Service;</li>
                 <li>Your violation of these Terms;</li>
                 <li>Your violation of any rights of another party, including any users;</li>

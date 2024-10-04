@@ -3,34 +3,36 @@ import { Box, Typography } from '@mui/material'
 import React from 'react'
 
 const title = {
-    fontFamily: 'Rubik',
-    fontSize: '2rem',
+    fontFamily: 'Inter',
+    fontSize: '1.5rem',
     fontWeight: '700',
     margin: '2% 0'
 }
 const title1 = {
-    fontFamily: 'Rubik',
-    fontSize: '1.5rem',
+    fontFamily: 'Inter',
+    fontSize: '1.1rem',
     fontWeight: '700',
     margin: '2% 0'
 }
 
 const text = {
-    fontFamily: 'Rubik',
-    fontSize: '1rem',
+    fontFamily: 'Inter',
+    fontSize: '0.85rem',
 }
 
 const page = () => {
     return (
-        <Box sx={{ padding: '10% 2%', "@media (max-width:760px)": {
+        <Box sx={{
+            padding: '10% 2%', "@media (max-width:760px)": {
                 padding: '20% 5%'
-            } }}>
+            }
+        }}>
             <Typography sx={title}>Privacy Policy</Typography>
             <Typography sx={text}>
                 Welcome, and thank you for your interest in ValueCreate Ventures LLP, our product Birthdayremind.app (“Birthdayremind.app,” “we,” or “us”), our website at https://Birthdayremind.app/ (the “Site”), and all related websites, and other services provided by us on which a link to this Privacy Policy and Terms and Conditions is displayed. This Privacy Policy describes the information that we collect through the Service, how we use and disclose such information, and the steps we take to protect it. By visiting the Site or by purchasing or using the Service, you accept the privacy practices described in this Policy. This Policy is incorporated into, and is subject to, the Birthdayremind.app’s Terms and Conditions. Capitalized terms used but not defined in this Policy have the meanings given to them in the Birthdayremind.app Terms & Conditions.
             </Typography>
             <Typography sx={title1}>Definitions</Typography>
-            <ul style={{ lineHeight: '2rem' }}>
+            <ul style={{ lineHeight: '2rem', fontSize:'0.85rem' }}>
                 <li>“Client” means a customer of Birthdayremind.app.</li>
                 <li>“Client Data” means personal data, reports, addresses, and other files, folders, or documents in electronic form that a User of the Service stores within the Service.</li>
                 <li>“Personal Data” means any information relating to an identified or identifiable natural person.</li>
@@ -96,7 +98,7 @@ const page = () => {
             <Typography sx={text}>
                 We may use a Visitor’s or User’s email address or other information, other than Client Data, to contact that Visitor or User:
             </Typography>
-            <ul style={{ lineHeight: '2rem' }}>
+            <ul style={{ lineHeight: '2rem', fontSize:'0.85rem' }}>
                 <li>
                     For administrative purposes such as customer service, to address intellectual property infringement, right of privacy violations, or defamation issues related to the Client Data or Personal Data posted on the Service; or
                 </li>
@@ -112,7 +114,7 @@ const page = () => {
             <Typography sx={text}>
                 We use automatically collected information and other information collected on the Service through cookies and similar technologies to:
             </Typography>
-            <ul style={{ lineHeight: '2rem' }}>
+            <ul style={{ lineHeight: '2rem', fontSize:'0.85rem' }}>
                 <li>Personalize our Service, such as remembering a User’s or Visitor’s information so that the User or Visitor will not have to re-enter it during a visit or on subsequent visits.</li>
                 <li>Provide customized advertisements, content, and information.</li>
                 <li>Monitor and analyze the effectiveness of the Service and third-party marketing activities.</li>
@@ -148,7 +150,7 @@ const page = () => {
             <Typography sx={text}>
                 We may make certain automatically collected, aggregated, or otherwise non-personally identifiable information available to third parties for various purposes, including:
             </Typography>
-            <ul style={{ lineHeight: '2rem' }}>
+            <ul style={{ lineHeight: '2rem', fontSize:'0.85rem' }}>
                 <li>Compliance with various reporting obligations,</li>
                 <li>Business or marketing purposes, or</li>
                 <li>Assisting such parties in understanding our Clients', Users', and Visitors' interests, habits, and usage patterns for certain programs, content, services, and/or functionality available through the Service.</li>
@@ -163,7 +165,7 @@ const page = () => {
             <Typography sx={text}>
                 We also reserve the right to disclose Personal Data or other information that we believe, in good faith, is appropriate or necessary to:
             </Typography>
-            <ul style={{ lineHeight: '2rem' }}>
+            <ul style={{ lineHeight: '2rem', fontSize:'0.85rem' }}>
                 <li>Take precautions against liability,</li>
                 <li>Protect ourselves or others from fraudulent, abusive, or unlawful uses or activity,</li>
                 <li>Investigate and defend ourselves against any third-party claims or allegations,</li>
@@ -212,7 +214,7 @@ const page = () => {
             <Typography sx={text}>
                 Depending on your jurisdiction, you may have the right to:
             </Typography>
-            <ul style={{ lineHeight: '2rem' }}>
+            <ul style={{ lineHeight: '2rem', fontSize:'0.85rem' }}>
                 <li>Request access to your Personal Data, and the rectification or deletion of such data.</li>
                 <li>Request the restriction of the processing concerning you, or object to the processing of your data.</li>
                 <li>Withdraw consent at any time, where we rely on your consent to process your Personal Data.</li>

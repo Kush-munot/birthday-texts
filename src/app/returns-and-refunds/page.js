@@ -2,21 +2,21 @@ import { Box, Typography } from '@mui/material'
 import React from 'react'
 
 const title = {
-    fontFamily: 'Rubik',
-    fontSize: '2rem',
+    fontFamily: 'Inter',
+    fontSize: '1.5rem',
     fontWeight: '700'
 }
 
 const title1 = {
-    fontFamily: 'Rubik',
-    fontSize: '1.5rem',
+    fontFamily: 'Inter',
+    fontSize: '1.1rem',
     fontWeight: '700',
     margin: '2% 0'
 }
 
 const text = {
-    fontFamily: 'Rubik',
-    fontSize: '1rem',
+    fontFamily: 'Inter',
+    fontSize: '0.85rem',
 }
 
 const page = () => {
@@ -38,7 +38,7 @@ const page = () => {
             <Typography sx={title1}>
                 How to Cancel Your Subscription:
             </Typography>
-            <ol style={{ lineHeight: '2rem' }}>
+            <ol style={{ lineHeight: '2rem', fontSize:'0.85rem' }}>
                 <li>Log in to your account on our website.</li>
                 <li>Navigate to the “Account Settings” or “Subscription Management” section.</li>
                 <li>Follow the prompts to cancel your subscription.</li>
@@ -47,7 +47,7 @@ const page = () => {
             <Typography sx={title1}>
                 Important Notes:
             </Typography>
-            <ul style={{ lineHeight: '2rem' }}>
+            <ul style={{ lineHeight: '2rem', fontSize:'0.85rem' }}>
                 <li>Your subscription will remain active until the end of the current billing cycle.</li>
                 <li>No further charges will be applied after cancellation, but we do not offer refunds for any remaining time left in the current cycle.</li>
             </ul>
