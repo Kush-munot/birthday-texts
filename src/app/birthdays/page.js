@@ -136,7 +136,7 @@ const Page = () => {
     const [msg, setMsg] = useState('');
     const [severity, setSeverity] = useState('');
     const [subsId, setSubsId] = useState('');
-    const [canceled, setCanceled] = useState()
+    const [canceled, setCanceled] = useState(false)
     const [isSubscribed, setIsSubscribed] = useState(false);
     const [birthdayData, setBirthdayData] = useState([]);
     const [editingBirthday, setEditingBirthday] = useState(null);
@@ -285,7 +285,7 @@ const Page = () => {
             const data = await response.json();
             console.log(data);
             setSubsId(data.subsId);
-            setIsSubscribed(true)
+            setIsSubscribed(data.isSubscribed)
             console.log(subsId);
         } else {
             setIsSubscribed(false)
@@ -483,10 +483,10 @@ const Page = () => {
                                 "@media (max-width:760px)": { justifyContent: 'center' }
                             }} md={4} sm={4} xs={12}>
                                 {
-                                    !isSubscribed ?
-                                        <Button onClick={openCheckout} sx={btn}>Subscribe</Button>
-                                        :
+                                    isSubscribed ?
                                         <Button onClick={handleOpen} sx={btn}>+ Add Birthday</Button>
+                                        :
+                                        <Button onClick={openCheckout} sx={btn}>Subscribe</Button>
                                 }
                             </Grid>
                             {birthdayData.map((birthday, index) => {
