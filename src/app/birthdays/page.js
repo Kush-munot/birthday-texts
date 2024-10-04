@@ -136,8 +136,8 @@ const Page = () => {
     const [msg, setMsg] = useState('');
     const [severity, setSeverity] = useState('');
     const [subsId, setSubsId] = useState('');
-    const [canceled, setCanceled] = useState(false)
-    const [isSubscribed, setIsSubscribed] = useState(   );
+    const [canceled, setCanceled] = useState()
+    const [isSubscribed, setIsSubscribed] = useState(false);
     const [birthdayData, setBirthdayData] = useState([]);
     const [editingBirthday, setEditingBirthday] = useState(null);
 
@@ -285,8 +285,10 @@ const Page = () => {
             const data = await response.json();
             console.log(data);
             setSubsId(data.subsId);
+            setIsSubscribed(true)
             console.log(subsId);
         } else {
+            setIsSubscribed(false)
             console.error('Error fetching customer ID:', response.statusText);
         }
     });
@@ -462,135 +464,85 @@ const Page = () => {
     return (
         <>
             {isLoggedIn ?
-                <Box style={{ padding: '8rem 0rem', minHeight: '100vh', }}>
-                    {
-                        !isSubscribed ?
-                            <Box sx={{ padding: '0 15%', "@media (max-width:760px)": { padding: '0 1rem' }, }}>
-                                <Grid container spacing={2} sx={{
-                                    width: '100%', marginLeft: '0', marginTop: '0', padding: '0 2% 0% 2%', border: '1px solid #1976d2', borderRadius: '10px', fontFamily: 'Inter',
-                                    "@media (max-width:760px)": { padding: '0 1rem' }
-                                }}>
-                                    <Grid sx={{ marginLeft: '0', marginTop: '0', }} md={8} sm={8} xs={12}>
-                                        <h2>Upcoming Birthdays 📆</h2>
-                                    </Grid>
-                                    <Grid sx={{
-                                        marginLeft: '0', marginTop: '0',display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }} md={4} sm={4} xs={12}>
+                <Box style={{ padding: '8rem 0rem', minHeight: 'calc(100vh - 440px)', }}>
+                    <Box sx={{ padding: '0 15%', "@media (max-width:760px)": { padding: '0 1rem' }, }}>
+                        <Grid container spacing={2} sx={{
+                            width: '100%', marginLeft: '0', marginTop: '0', border: '1px solid #1976d2', borderRadius: '10px', fontFamily: 'Inter',
+                            "@media (max-width:760px)": { padding: '0 1rem' }
+                        }}>
+                            <Grid sx={{ marginLeft: '0', marginTop: '0', padding: '0 2rem' }} md={8} sm={8} xs={12}>
+                                <h2 style={{ margin: '0.8rem 0' }}>Upcoming Birthdays 📆</h2>
+                                <h6 style={{ margin: '0.4rem 0', fontWeight: '400' }}>Whatsapp reminders sent @9AM EST
+                                    to {phoneNumber}</h6>
+                            </Grid>
+                            <Grid sx={{
+                                marginLeft: '0', marginTop: '0', display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'right',
+                                padding: '0 2rem',
+                                "@media (max-width:760px)": { justifyContent: 'center' }
+                            }} md={4} sm={4} xs={12}>
+                                {
+                                    !isSubscribed ?
                                         <Button onClick={openCheckout} sx={btn}>Subscribe</Button>
-                                    </Grid>
-                                </Grid>
-                            </Box>
-                            :
-                            <div>
-                                <Box sx={{ padding: '0 15%', "@media (max-width:760px)": { padding: '0 1rem' }, }}>
-                                    <Grid container spacing={2} sx={{
-                                        width: '100%', marginLeft: '0', marginTop: '0', border: '1px solid #1976d2', borderRadius: '10px', fontFamily: 'Inter'
+                                        :
+                                        <Button onClick={handleOpen} sx={btn}>+ Add Birthday</Button>
+                                }
+                            </Grid>
+                            {birthdayData.map((birthday, index) => {
+                                const daysLeft = calculateDaysLeft(birthday.date, birthday.month);
+                                return (
+                                    <Grid key={index} container spacing={2} sx={{
+                                        marginLeft: '0', marginTop: '0',
+                                        fontFamily: 'Inter'
                                     }}>
-                                        {/* <Grid container spacing={2} sx={{
-                                            padding: '0 1rem', marginLeft: '0', marginTop: '0', fontFamily: 'Inter',
-                                        }}>
-                                            <Grid sx={{ marginLeft: '0', marginTop: '0', }} md={8} sm={8} xs={12}>
-                                                <h2>Upcoming Birthdays 📆</h2>
-                                            </Grid>
-                                            <Grid md={4} sm={4} xs={12} sx={{
-                                                marginLeft: '0', marginTop: '0', display: 'flex', alignItems: 'center', justifyContent: 'right', "@media (max-width:760px)": {
-                                                    justifyContent: 'center',
-                                                }
-                                            }}>
-                                                <Button onClick={handleOpen} sx={btn}>+ Add Birthday</Button>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid sx={{ marginLeft: '0', marginTop: '0' }} md={12} sm={12} xs={12}>
-                                            <Box sx={{
-                                                display: 'flex',
-                                                position: 'relative',
-                                                justifyContent: 'space-between',
-                                                padding: '0 1rem',
-                                                "@media (max-width:760px)": {
-                                                    padding: '0 1rem 1rem 1rem'
-                                                }
-                                            }}>
-                                                <h6>Whatsapp reminders sent @9AM EST
-                                                    to {phoneNumber}</h6>
-                                                <Button onClick={openCancelSubscription} sx={btn}>Cancel Subscription</Button>
-                                            </Box>
-                                        </Grid> */}
+                                        <Divider sx={{ width: '100%', backgroundColor: '#1976d2' }} />
+                                        <Grid sx={{ marginLeft: '0', marginTop: '0', padding: '0.5rem' }} md={10} sm={10} xs={10}>
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <Stack sx={{ backgroundColor: '#dbeafe', borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                    <Typography sx={{ height: '25px', width: '60px', fontSize: '0.85rem', color: '#2563eb', fontWeight: '500', fontFamily: 'Inter', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                        {birthday.month.slice(0, 3)}
+                                                    </Typography>
+                                                    <Typography sx={{ height: '25px', width: '60px', fontSize: '1rem', color: '#2563eb', fontWeight: '700', fontFamily: 'Inter', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                        {birthday.date}
+                                                    </Typography>
+                                                </Stack>
+                                                <Stack sx={{ width: '100%' }}>
 
-                                        <Grid container spacing={2} sx={{
-                                            padding: '0 1rem', marginLeft: '0', marginTop: '0', fontFamily: 'Inter',
-                                        }}>
-
-                                            <Grid sx={{ marginLeft: '0', marginTop: '0', }} md={8} sm={8} xs={12}>
-                                                <h2 style={{ margin: '0.8rem 0' }}>Upcoming Birthdays 📆</h2>
-                                                <h6 style={{ margin: '0.4rem 0', fontWeight: '400' }}>Whatsapp reminders sent @9AM EST
-                                                    to {phoneNumber}</h6>
-                                            </Grid>
-                                            <Grid sx={{
-                                                marginLeft: '0',
-                                                marginTop: '0',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                            }} md={4} sm={4} xs={12}>
-                                                <Button onClick={handleOpen} sx={btn}>+ Add Birthday</Button>
-                                            </Grid>
-                                        </Grid>
-                                        {birthdayData.map((birthday, index) => {
-                                            const daysLeft = calculateDaysLeft(birthday.date, birthday.month);
-                                            return (
-                                                <Grid key={index} container spacing={2} sx={{
-                                                    marginLeft: '0', marginTop: '0',
-                                                    fontFamily: 'Inter'
-                                                }}>
-                                                    <Divider sx={{ width: '100%', backgroundColor: '#1976d2'}} />
-                                                    <Grid sx={{ marginLeft: '0', marginTop: '0', padding: '0.5rem' }} md={10} sm={10} xs={10}>
-                                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                            <Stack sx={{ backgroundColor: '#dbeafe', borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                                                <Typography sx={{ height: '25px', width: '60px', fontSize: '0.85rem', color: '#2563eb', fontWeight: '500', fontFamily: 'Inter', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                                                    {birthday.month.slice(0, 3)}
-                                                                </Typography>
-                                                                <Typography sx={{ height: '25px', width: '60px', fontSize: '1rem', color: '#2563eb', fontWeight: '700', fontFamily: 'Inter', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                                                    {birthday.date}
-                                                                </Typography>
-                                                            </Stack>
-                                                            <Stack sx={{ width: '100%' }}>
-
-                                                                <Typography sx={{
-                                                                    margin: '0 5%', fontSize: '1rem', fontWeight: '500', fontFamily: 'Inter', display: 'flex', alignItems: 'center',
-                                                                    "@media (max-width:600px)": {
-                                                                        fontSize: '1.2rem'
-                                                                    },
-                                                                }}>
-                                                                    {birthday.name}
-                                                                </Typography>
-                                                                {/* <Typography sx={{
+                                                    <Typography sx={{
+                                                        margin: '0 5%', fontSize: '1rem', fontWeight: '500', fontFamily: 'Inter', display: 'flex', alignItems: 'center',
+                                                        "@media (max-width:600px)": {
+                                                            fontSize: '1.2rem'
+                                                        },
+                                                    }}>
+                                                        {birthday.name}
+                                                    </Typography>
+                                                    {/* <Typography sx={{
                                                                 margin: '0 5%', height: '25px', width: 'fit-content', fontSize: '0.7rem', color: 'gray', fontWeight: '500', fontFamily: 'Inter', display: 'flex', justifyContent: 'center', alignItems: 'center', float: 'right',
 
                                                             }}>
                                                                 {calculateDaysLeft(birthday.date, birthday.month)}
                                                             </Typography> */}
-                                                                <Chip sx={{ width: 'fit-content', padding: '0 0.05rem', fontSize: '0.7rem', color: daysLeft === 'Today !' ? '#ffffff' : '#6b7280', height: '25px', margin: '0 5%', borderRadius: '5px', backgroundColor: daysLeft === 'Today !' ? '#ef4444' : '#f9fafb' }} label={`${calculateDaysLeft(birthday.date, birthday.month)}`} />
-                                                            </Stack>
+                                                    <Chip sx={{ width: 'fit-content', padding: '0 0.05rem', fontSize: '0.7rem', color: daysLeft === 'Today !' ? '#ffffff' : '#6b7280', height: '25px', margin: '0 5%', borderRadius: '5px', backgroundColor: daysLeft === 'Today !' ? '#ef4444' : '#f9fafb' }} label={`${calculateDaysLeft(birthday.date, birthday.month)}`} />
+                                                </Stack>
 
-                                                        </Box>
-                                                    </Grid>
-                                                    <Grid md={2} sm={2} xs={2} sx={{
-                                                        marginLeft: '0', marginTop: '0', display: 'flex', justifyContent: 'space-around', alignItems: 'center', "@media (max-width:760px)": {
-                                                            paddingRight: '0.2rem'
-                                                        }
-                                                    }}>
-                                                        <EditIcon
-                                                            onClick={() => handleEdit(birthday)}
-                                                            sx={{ cursor: 'pointer', color: '#374151', fontSize: '1.1rem' }}
-                                                        />
-                                                        <DeleteIcon
-                                                            onClick={() => handleDelete(birthday)}
-                                                            sx={{ cursor: 'pointer', color: '#374151', fontSize: '1.1rem' }}
-                                                        />
-                                                    </Grid>
-                                                    {/* <Grid md={3.5} sm={3.5} xs={12} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'right' }}>
+                                            </Box>
+                                        </Grid>
+                                        <Grid md={2} sm={2} xs={2} sx={{
+                                            marginLeft: '0', marginTop: '0', display: 'flex', justifyContent: 'space-around', alignItems: 'center', "@media (max-width:760px)": {
+                                                paddingRight: '0.2rem'
+                                            }
+                                        }}>
+                                            <EditIcon
+                                                onClick={() => handleEdit(birthday)}
+                                                sx={{ cursor: 'pointer', color: '#374151', fontSize: '1.1rem' }}
+                                            />
+                                            <DeleteIcon
+                                                onClick={() => handleDelete(birthday)}
+                                                sx={{ cursor: 'pointer', color: '#374151', fontSize: '1.1rem' }}
+                                            />
+                                        </Grid>
+                                        {/* <Grid md={3.5} sm={3.5} xs={12} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'right' }}>
                                                 <Typography sx={{
                                                     height: '35px', width: 'fit-content', padding: '0 0.5rem', fontSize: '1rem', color: 'white', fontWeight: '500', fontFamily: 'Inter', backgroundColor: '#C75B7A', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center', float: 'right',
                                                     "@media (max-width:780px)": {
@@ -601,22 +553,25 @@ const Page = () => {
                                                 </Typography>
                 
                                             </Grid> */}
-                                                </Grid>
-                                            )
-                                        })}
-                                        <Grid container spacing={2} sx={{
-                                            marginLeft: '0', marginTop: '0',
-                                            fontFamily: 'Inter'
-                                        }}>
-                                            <Divider sx={{ width: '100%', backgroundColor: '#1976d2', height: '0.1px' }} />
-                                            <Grid sx={{ marginLeft: '0', marginTop: '0', display: 'flex', alignItems: 'center', justifyContent: 'center' }} md={12} sm={12} xs={12}>
-                                                <Button onClick={openCancelSubscription} sx={btn}>Cancel Subscription</Button>
-                                            </Grid>
+                                    </Grid>
+                                )
+                            })}
+                            {
+                                isSubscribed ?
+                                    <Grid container spacing={2} sx={{
+                                        marginLeft: '0', marginTop: '0',
+                                        fontFamily: 'Inter'
+                                    }}>
+                                        <Divider sx={{ width: '100%', backgroundColor: '#1976d2', height: '0.1px' }} />
+                                        <Grid sx={{ marginLeft: '0', marginTop: '0', display: 'flex', alignItems: 'center', justifyContent: 'center' }} md={12} sm={12} xs={12}>
+                                            <Button onClick={openCancelSubscription} sx={btn}>Cancel Subscription</Button>
                                         </Grid>
                                     </Grid>
-                                </Box>
-                            </div>
-                    }
+                                    :
+                                    <div></div>
+                            }
+                        </Grid>
+                    </Box>
                 </Box>
                 :
                 <div style={{ paddingTop: '4rem', minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
