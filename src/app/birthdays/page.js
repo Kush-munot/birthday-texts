@@ -137,7 +137,7 @@ const Page = () => {
     const [severity, setSeverity] = useState('');
     const [subsId, setSubsId] = useState('');
     const [canceled, setCanceled] = useState(false)
-    const [isSubscribed, setIsSubscribed] = useState(false);
+    const [isSubscribed, setIsSubscribed] = useState(   );
     const [birthdayData, setBirthdayData] = useState([]);
     const [editingBirthday, setEditingBirthday] = useState(null);
 
@@ -544,7 +544,7 @@ const Page = () => {
                                                     marginLeft: '0', marginTop: '0',
                                                     fontFamily: 'Inter'
                                                 }}>
-                                                    <Divider sx={{ width: '100%', backgroundColor: '#1976d2', height: '0.1px' }} />
+                                                    <Divider sx={{ width: '100%', backgroundColor: '#1976d2'}} />
                                                     <Grid sx={{ marginLeft: '0', marginTop: '0', padding: '0.5rem' }} md={10} sm={10} xs={10}>
                                                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                             <Stack sx={{ backgroundColor: '#dbeafe', borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
