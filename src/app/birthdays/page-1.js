@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Box, Button, Divider, FormControl, Grid, InputLabel, MenuItem, Modal, Select, Snackbar, Stack, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, FormControl, Grid, InputLabel, MenuItem, Modal, Select, Snackbar, Stack, TextField, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react'
 import { differenceInCalendarDays, addYears, format } from 'date-fns';
@@ -18,11 +18,10 @@ const btn = {
     fontFamily: 'Rubik',
     backgroundColor: "#1976d2",
     height: "40px",
+    width: "auto",
     textTransform: 'none',
     borderRadius: '25px',
     margin: '1rem 0',
-    width: 'fit-content', 
-    padding: '0 0.5rem',
     float: 'right',
     "&:hover": {
         backgroundColor: "#915831",
@@ -111,9 +110,8 @@ const calculateDaysLeft = (day, month) => {
     }
 
     const daysLeft = differenceInCalendarDays(birthday, today);
-    const label = daysLeft === 1 ? 'Day left' : 'Days left';
 
-    return `${daysLeft} ${label}`;
+    return daysLeft;
 };
 
 
@@ -441,13 +439,15 @@ const Page = () => {
 
     return (
         <>
-            {isLoggedIn ?
-                <Box style={{ padding: '8rem 0rem', minHeight: '100vh', }}>
+            {isLoggedIn ? (
+                <div style={{ padding: '8rem 1rem 5rem 2rem', minHeight: '100vh', }}>
                     {
                         !isSubscribed ?
                             <div>
                                 <Grid container spacing={2} sx={{
-                                    padding: '0 2% 0% 2%', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik'
+                                    padding: '0 2% 0% 2%', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik', "@media (max-width:600px)": {
+                                        padding: '4%'
+                                    },
                                 }}>
                                     <Grid md={8} sm={8} xs={12}>
                                         <h2>Upcoming Birthdays 📆</h2>
@@ -459,110 +459,90 @@ const Page = () => {
                             </div>
                             :
                             <div>
-                                <Box sx={{ padding: '0 4rem', "@media (max-width:760px)": { padding: '0 1rem' }, }}>
+                                <Grid container spacing={2} sx={{
+                                    padding: '0 2% 0% 2%', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik', "@media (max-width:600px)": {
+                                        padding: '4%'
+                                    },
+                                }}>
                                     <Grid container spacing={2} sx={{
-                                        width: '100%', marginLeft: '0', marginTop: '0', border: '1px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik'
+                                        padding: '0 2% 0% 2%', fontFamily: 'Rubik', "@media (max-width:600px)": {
+                                            padding: '4%'
+                                        },
                                     }}>
-                                        <Grid container spacing={2} sx={{
-                                            padding: '0 1rem', marginLeft: '0', marginTop: '0', fontFamily: 'Rubik',
-                                        }}>
-                                            <Grid sx={{ marginLeft: '0', marginTop: '0', }} md={8} sm={8} xs={12}>
-                                                <h2>Upcoming Birthdays 📆</h2>
-                                            </Grid>
-                                            <Grid md={4} sm={4} xs={12} sx={{
-                                                marginLeft: '0', marginTop: '0', display: 'flex', alignItems: 'center', justifyContent: 'right', "@media (max-width:760px)": {
-                                                    justifyContent: 'center',
-                                                }
-                                            }}>
-                                                <h6>Whatsapp reminders sent @9AM EST
-                                                    to {phoneNumber}</h6>
-                                            </Grid>
+                                        <Grid md={8} sm={8} xs={12}>
+                                            <h2>Upcoming Birthdays 📆</h2>
                                         </Grid>
-                                        <Grid sx={{ marginLeft: '0', marginTop: '0' }} md={12} sm={12} xs={12}>
-                                            <Box sx={{
-                                                display: 'flex',
-                                                position: 'relative',
-                                                justifyContent: 'space-between',
-                                                padding: '0 1rem',
-                                                "@media (max-width:760px)": {
-                                                    padding: '0 1rem 1rem 1rem'
-                                                }
-                                            }}>
-                                                <Button onClick={handleOpen} sx={btn}>+ Add Birthday</Button>
-                                                <Button onClick={openCancelSubscription} sx={btn}>Cancel Subscription</Button>
-                                            </Box>
+                                        <Grid md={4} sm={4} xs={12} sx={{display:'flex', alignItems:'center', justifyContent:'right'}}>
+                                            <h6>Whatsapp reminders sent @9AM EST
+                                                to {phoneNumber}</h6>
                                         </Grid>
-                                        {birthdayData.map((birthday, index) => (
-                                            <Grid key={index} container spacing={2} sx={{
-                                                marginLeft: '0', marginTop: '0',
-                                                fontFamily: 'Rubik'
-                                            }}>
-                                                <Divider sx={{ width: '100%', backgroundColor: '#1976d2', height: '0.1px' }} />
-                                                <Grid sx={{ marginLeft: '0', marginTop: '0', padding: '0.5rem' }} md={10} sm={10} xs={10}>
-                                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                        <Stack sx={{ backgroundColor: '#6EACDA', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                                            <Typography sx={{ height: '35px', width: '80px', fontSize: '0.9rem', color: 'white', fontWeight: '500', fontFamily: 'Rubik', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                                                {birthday.month.slice(0, 3)}
-                                                            </Typography>
-                                                            <Typography sx={{ height: '35px', width: '80px', fontSize: '1.8rem', color: 'white', fontWeight: '700', fontFamily: 'Rubik', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                                                {birthday.date}
-                                                            </Typography>
-                                                        </Stack>
-                                                        <Stack sx={{ width: '100%' }}>
-
-                                                            <Typography sx={{
-                                                                margin: '0 5%', fontSize: '1.7rem', fontWeight: '500', fontFamily: 'Rubik', display: 'flex', alignItems: 'center',
-                                                                "@media (max-width:600px)": {
-                                                                    fontSize: '1.2rem'
-                                                                },
-                                                            }}>
-                                                                {birthday.name}
-                                                            </Typography>
-                                                            <Typography sx={{
-                                                                margin: '0 5%', height: '25px', width: 'fit-content', fontSize: '0.7rem', color: 'gray', fontWeight: '500', fontFamily: 'Rubik', display: 'flex', justifyContent: 'center', alignItems: 'center', float: 'right',
-
-                                                            }}>
-                                                                {calculateDaysLeft(birthday.date, birthday.month)}
-                                                            </Typography>
-                                                        </Stack>
-
-                                                    </Box>
-                                                </Grid>
-                                                <Grid md={2} sm={2} xs={2} sx={{ marginLeft: '0', marginTop: '0', display: 'flex', justifyContent: 'space-around', alignItems: 'center', "@media (max-width:760px)": {
-                                                    paddingRight:'0.2rem'
-                                                } }}>
-                                                    <EditIcon
-                                                        onClick={() => handleEdit(birthday)}
-                                                        sx={{ cursor: 'pointer', color: '#1976d2' }}
-                                                    />
-                                                    <DeleteIcon
-                                                        onClick={() => handleDelete(birthday)}
-                                                        sx={{ cursor: 'pointer', color: '#1976d2' }}
-                                                    />
-                                                </Grid>
-                                                {/* <Grid md={3.5} sm={3.5} xs={12} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'right' }}>
-                                                <Typography sx={{
-                                                    height: '35px', width: 'fit-content', padding: '0 0.5rem', fontSize: '1rem', color: 'white', fontWeight: '500', fontFamily: 'Rubik', backgroundColor: '#C75B7A', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center', float: 'right',
-                                                    "@media (max-width:780px)": {
-                                                        display: 'none'
-                                                    },
-                                                }}>
-                                                    {calculateDaysLeft(birthday.date, birthday.month)} Days to go..
-                                                </Typography>
-                
-                                            </Grid> */}
-                                            </Grid>
-                                        ))}
                                     </Grid>
-                                </Box>
+                                    <Grid md={12} sm={12} xs={12}>
+                                        <div style={{
+                                            display: 'flex',
+                                            position: 'relative',
+                                            justifyContent: 'space-between'
+                                        }}>
+                                            <Button onClick={handleOpen} sx={btn}>+ Add Birthday</Button>
+                                            <Button onClick={openCancelSubscription} sx={btn}>Cancel Subscription</Button>
+                                        </div>
+                                    </Grid>
+                                </Grid>
                             </div>
                     }
-                </Box>
-                :
-                <div style={{ paddingTop: '4rem', minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+
+                    {birthdayData.map((birthday, index) => (
+                        <Grid key={index} container spacing={2} sx={{
+                            padding: '4% 2% 0 0', fontFamily: 'Rubik', "@media (max-width:600px)": {
+                                padding: '7% 2% 0 0'
+                            },
+                        }}>
+                            <Grid md={6.5} sm={6.5} xs={10}>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Typography sx={{ height: '35px', width: '80px', fontSize: '1rem', color: 'white', fontWeight: '500', fontFamily: 'Rubik', backgroundColor: '#6EACDA', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                        {birthday.date} {birthday.month.slice(0, 3)}
+                                    </Typography>
+                                    <Typography sx={{
+                                        margin: '0 5%', fontSize: '1.7rem', fontWeight: '500', fontFamily: 'Rubik', display: 'flex', justifyContent: 'center', alignItems: 'center',
+                                        "@media (max-width:600px)": {
+                                            fontSize: '1.2rem'
+                                        },
+                                    }}>
+                                        {birthday.name}
+                                    </Typography>
+
+                                </Box>
+                            </Grid>
+                            <Grid md={2} sm={2} xs={2} sx={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                                <EditIcon
+                                    onClick={() => handleEdit(birthday)}
+                                    sx={{ cursor: 'pointer', color: '#1976d2' }}
+                                />
+                                <DeleteIcon
+                                    onClick={() => handleDelete(birthday)}
+                                    sx={{ cursor: 'pointer', color: '#1976d2' }}
+                                />
+                            </Grid>
+                            <Grid md={3.5} sm={3.5} xs={12} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'right' }}>
+                                <Typography sx={{
+                                    height: '35px', width: 'fit-content', padding: '0 0.5rem', fontSize: '1rem', color: 'white', fontWeight: '500', fontFamily: 'Rubik', backgroundColor: '#C75B7A', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center', float: 'right',
+                                    "@media (max-width:780px)": {
+                                        display: 'none'
+                                    },
+                                }}>
+                                    {calculateDaysLeft(birthday.date, birthday.month)} Days to go..
+                                </Typography>
+
+                            </Grid>
+                        </Grid>
+                    ))}
+
+                </div >
+            ) : (
+                <div style={{ paddingTop: '4rem', minHeight:'60vh', display:'flex', alignItems:'center', justifyContent:'center' }}>
                     <h1>Loading...</h1>
                 </div>
-            }
+            )}
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -673,7 +653,6 @@ const Page = () => {
                     {msg}
                 </Alert>
             </Snackbar>
-
         </>
     )
 }
