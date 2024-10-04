@@ -137,7 +137,7 @@ const Page = () => {
     const [severity, setSeverity] = useState('');
     const [subsId, setSubsId] = useState('');
     const [canceled, setCanceled] = useState(false)
-    const [isSubscribed, setIsSubscribed] = useState(true);
+    const [isSubscribed, setIsSubscribed] = useState(false);
     const [birthdayData, setBirthdayData] = useState([]);
     const [editingBirthday, setEditingBirthday] = useState(null);
 
@@ -607,7 +607,7 @@ const Page = () => {
                                             fontFamily: 'Inter'
                                         }}>
                                             <Divider sx={{ width: '100%', backgroundColor: '#1976d2', height: '0.1px' }} />
-                                            <Grid sx={{ marginLeft: '0', marginTop: '0', display:'flex', alignItems:'center', justifyContent:'center' }} md={12} sm={12} xs={12}>
+                                            <Grid sx={{ marginLeft: '0', marginTop: '0', display: 'flex', alignItems: 'center', justifyContent: 'center' }} md={12} sm={12} xs={12}>
                                                 <Button onClick={openCancelSubscription} sx={btn}>Cancel Subscription</Button>
                                             </Grid>
                                         </Grid>
