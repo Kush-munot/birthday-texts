@@ -474,7 +474,9 @@ const Page = () => {
                                         <h2>Upcoming Birthdays 📆</h2>
                                     </Grid>
                                     <Grid sx={{
-                                        marginLeft: '0', marginTop: '0',
+                                        marginLeft: '0', marginTop: '0',display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
                                     }} md={4} sm={4} xs={12}>
                                         <Button onClick={openCheckout} sx={btn}>Subscribe</Button>
                                     </Grid>

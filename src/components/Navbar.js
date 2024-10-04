@@ -15,7 +15,7 @@ const btn = {
     color: "white",
     fontFamily: 'Inter',
     backgroundColor: "#1976d2",
-    height: "40px",
+    height: "30px",
     width: "auto",
     textTransform: 'none',
     borderRadius: '5px',
