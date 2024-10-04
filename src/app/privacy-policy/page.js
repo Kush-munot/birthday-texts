@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import React from 'react'
 
 const title = {
@@ -22,7 +22,9 @@ const text = {
 
 const page = () => {
     return (
-        <div style={{ padding: '10% 2%' }}>
+        <Box sx={{ padding: '10% 2%', "@media (max-width:760px)": {
+                padding: '20% 5%'
+            } }}>
             <Typography sx={title}>Privacy Policy</Typography>
             <Typography sx={text}>
                 Welcome, and thank you for your interest in ValueCreate Ventures LLP, our product Birthdayremind.app (“Birthdayremind.app,” “we,” or “us”), our website at https://Birthdayremind.app/ (the “Site”), and all related websites, and other services provided by us on which a link to this Privacy Policy and Terms and Conditions is displayed. This Privacy Policy describes the information that we collect through the Service, how we use and disclose such information, and the steps we take to protect it. By visiting the Site or by purchasing or using the Service, you accept the privacy practices described in this Policy. This Policy is incorporated into, and is subject to, the Birthdayremind.app’s Terms and Conditions. Capitalized terms used but not defined in this Policy have the meanings given to them in the Birthdayremind.app Terms & Conditions.
@@ -217,7 +219,7 @@ const page = () => {
                 <li>Lodge a complaint with a supervisory authority under applicable data protection laws.</li>
             </ul>
 
-        </div>
+        </Box>
     )
 }
 

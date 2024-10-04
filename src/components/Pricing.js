@@ -98,7 +98,7 @@ const Pricing = () => {
                     }}>
                         <Typography sx={{ textTransform: 'none', fontWeight: '500' }}>Annually</Typography>
                     </Button>
-                    <Typography sx={{ fontSize: '62px', fontFamily: 'Nunito Sans', fontWeight: '700', ml: '5%' }}>$ 19.99 <span style={{ fontSize: '22px', fontFamily: 'Nunito Sans', fontWeight: '700' }}>/per year</span></Typography>
+                    <Typography sx={{ fontSize: '62px', fontFamily: 'Nunito Sans', fontWeight: '700', marginLeft: '3%' }}>$ 19.99 <span style={{ fontSize: '22px', fontFamily: 'Nunito Sans', fontWeight: '700', letterSpacing: '0rem' }}>/per year</span></Typography>
                     <List sx={{ mt: '5%' }}>
                         {pro_plan.map((feature, index) => (
                             <ListItem key={index}>

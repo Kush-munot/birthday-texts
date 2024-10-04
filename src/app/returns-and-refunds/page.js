@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import React from 'react'
 
 const title = {
@@ -21,9 +21,13 @@ const text = {
 
 const page = () => {
     return (
-        <div style={{ padding: '10% 2%' }}>
+        <Box sx={{
+            padding: '10% 2%', "@media (max-width:760px)": {
+                padding: '20% 5%'
+            }
+        }}>
             <Typography sx={title}>
-            Refunds And Returns
+                Refunds And Returns
             </Typography>
             <Typography sx={text}>
                 Thank You for Choosing Our Subscription Service!
@@ -52,7 +56,7 @@ const page = () => {
                 We hope you enjoy our service, and we are here to assist if you have any questions or need support. Thank you for your understanding and for being a valued part of our community.
             </Typography>
 
-        </div>
+        </Box>
     )
 }
 

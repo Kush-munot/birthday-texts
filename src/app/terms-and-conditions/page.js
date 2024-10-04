@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import React from 'react'
 
 const title = {
@@ -22,7 +22,11 @@ const text = {
 
 const page = () => {
     return (
-        <div style={{ padding: '10% 2%' }}>
+        <Box sx={{
+            padding: '10% 2%', "@media (max-width:760px)": {
+                padding: '20% 5%'
+            }
+        }}>
             <Typography sx={title}>
                 Terms and Conditions
             </Typography>
@@ -163,7 +167,7 @@ const page = () => {
             <Typography sx={text}>
                 These Terms will be governed by and construed in accordance with the laws of India, without regard to its conflict of law principles. You agree that any legal action or proceeding arising out of or related to these Terms or your use of the Service must be brought exclusively in the courts located in New Delhi, India, and you consent to the jurisdiction of and venue in such courts.
             </Typography>
-        </div>
+        </Box>
     )
 }
 

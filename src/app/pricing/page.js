@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
-import { Alert, Button, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Snackbar, Typography } from '@mui/material'
+import { Alert, Box, Button, Grid, Link, List, ListItem, ListItemIcon, ListItemText, Snackbar, Typography } from '@mui/material'
 import React, { useCallback, useEffect, useState } from 'react'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { initializePaddle } from "@paddle/paddle-js";
@@ -263,7 +263,11 @@ const page = () => {
         }
     }; */
     return (
-        <div style={{ padding: '10% 2%' }}>
+        <Box sx={{
+            padding: '10% 2%', "@media (max-width:760px)": {
+                padding: '20% 5%'
+            }
+        }}>
             <Typography sx={title}>Pricing</Typography>
             <Typography sx={text}>Get complimentary Free 7-days trial 🥳</Typography>
             <Grid container >
@@ -360,7 +364,7 @@ const page = () => {
                             </ListItem>
                         ))}
                     </List>
-                    
+
                     {
                         !isSubscribed ?
                             <Button sx={{
@@ -424,7 +428,7 @@ const page = () => {
             </Snackbar>
 
 
-        </div>
+        </Box>
     )
 }
 

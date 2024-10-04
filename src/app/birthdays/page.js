@@ -21,7 +21,7 @@ const btn = {
     textTransform: 'none',
     borderRadius: '25px',
     margin: '1rem 0',
-    width: 'fit-content', 
+    width: 'fit-content',
     padding: '0 0.5rem',
     float: 'right',
     "&:hover": {
@@ -30,8 +30,7 @@ const btn = {
     },
     "@media (max-width:610px)": {
         float: 'left',
-        margin: '1.2rem 0 0 0.5rem',
-
+        margin: '1rem 0',
     },
 };
 
@@ -445,18 +444,21 @@ const Page = () => {
                 <Box style={{ padding: '8rem 0rem', minHeight: '100vh', }}>
                     {
                         !isSubscribed ?
-                            <div>
+                            <Box sx={{ padding: '0 1rem' }}>
                                 <Grid container spacing={2} sx={{
-                                    padding: '0 2% 0% 2%', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik'
+                                    width: '100%', marginLeft: '0', marginTop: '0', padding: '0 2% 0% 2%', border: '2px solid #1976d2', borderRadius: '25px', fontFamily: 'Rubik',
+                                    "@media (max-width:760px)": { padding: '0 1rem' }
                                 }}>
-                                    <Grid md={8} sm={8} xs={12}>
+                                    <Grid sx={{ marginLeft: '0', marginTop: '0', }} md={8} sm={8} xs={12}>
                                         <h2>Upcoming Birthdays 📆</h2>
                                     </Grid>
-                                    <Grid md={4} sm={4} xs={12}>
+                                    <Grid sx={{
+                                        marginLeft: '0', marginTop: '0',
+                                    }} md={4} sm={4} xs={12}>
                                         <Button onClick={openCheckout} sx={btn}>Subscribe</Button>
                                     </Grid>
                                 </Grid>
-                            </div>
+                            </Box>
                             :
                             <div>
                                 <Box sx={{ padding: '0 4rem', "@media (max-width:760px)": { padding: '0 1rem' }, }}>
@@ -528,9 +530,11 @@ const Page = () => {
 
                                                     </Box>
                                                 </Grid>
-                                                <Grid md={2} sm={2} xs={2} sx={{ marginLeft: '0', marginTop: '0', display: 'flex', justifyContent: 'space-around', alignItems: 'center', "@media (max-width:760px)": {
-                                                    paddingRight:'0.2rem'
-                                                } }}>
+                                                <Grid md={2} sm={2} xs={2} sx={{
+                                                    marginLeft: '0', marginTop: '0', display: 'flex', justifyContent: 'space-around', alignItems: 'center', "@media (max-width:760px)": {
+                                                        paddingRight: '0.2rem'
+                                                    }
+                                                }}>
                                                     <EditIcon
                                                         onClick={() => handleEdit(birthday)}
                                                         sx={{ cursor: 'pointer', color: '#1976d2' }}
