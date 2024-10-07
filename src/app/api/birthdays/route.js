@@ -193,14 +193,14 @@ export async function GET(req) {
 
             const result = allBirthdays.map(user => {
                 const upcomingBirthdays = user.birthdays
-                    .filter(birthday => calculateDaysLeft(birthday.date, birthday.month) <= 3)
+                    // .filter(birthday => calculateDaysLeft(birthday.date, birthday.month) <= 3)
                     .map(birthday => ({
                         name: birthday.name,
                         day: birthday.date,
                         month: birthday.month
                     }));
 
-                //console.log(upcomingBirthdays);
+                console.log(upcomingBirthdays);
 
                 if (upcomingBirthdays.length > 0) {
                     return {
